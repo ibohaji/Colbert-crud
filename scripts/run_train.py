@@ -1,6 +1,6 @@
 # scripts/run_train.py
 from colbert_v2 import Trainer, create_dataloader
-from colbert_v2.model.indexer import Encoder
+from colbert_v2.models.indexer import Encoder
 
 # Load data, create encoder and dataloader
 texts, labels = load_your_data()  # Dummy function
