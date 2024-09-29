@@ -4,8 +4,12 @@ class Collection:
         self.path = path
 
     def load_collection(self):
+        documents = []
         with open(self.path, 'r') as f:
-            documents = [line.strip() for line in f.readlines()]
+            for line in f:
+                columns = line.strip().split('\t')
+                documents.append(columns)
+
         return documents
 
     def save_new_document(self, new_document):
