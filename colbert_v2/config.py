@@ -1,6 +1,8 @@
 # config.py
 from colbert.infra import ColBERTConfig
+from dataclasses import dataclass
 
+@dataclass
 class Config:
     CHECKPOINT = "colbert-ir/colbertv2.0"  # Pretrained ColBERT V2 model
     DOC_MAXLEN = 300  # Maximum length of each document
