@@ -4,10 +4,15 @@ from colbert.infra import Run, RunConfig, ColBERTConfig
 from colbert.data import Queries, Collection
 from config import Config
 import os 
+from data.collection import FileProcessor
 
 class ColBERTIndexer:
     def __init__(self, config, collection_path):
         self.config = config
+
+        FileProcessor.add_missing_headers(config.QUERIES_PATH)
+        FileProcessor.add_missing_headers(config.COLLECTION_PATH)
+        
         self.queries = Queries(path=config.QUERIES_PATH)
         self.collection = Collection(path=config.COLLECTION_PATH)
     
