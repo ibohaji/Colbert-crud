@@ -15,22 +15,19 @@ class FileProcessor:
     def add_missing_headers(input_file):
         with open(input_file, 'r') as f_in:
             first_line = f_in.readline().strip()
-            headers = first_line.split('\t')
-            
-            if headers[0] != "id" or len(headers) < 2 or headers[1] != "text":
+
+            # Check if the first line has the 'id' and 'text' headers
+            if not first_line.startswith("id\ttext"):
                 with open(input_file, 'w') as f_out:
-                    f_out.write("id\ttext\n")
-                    
-                    if headers[0] != "id":
-                        f_out.write(first_line + '\n')
-                    
-                    for line in f_in:
-                        f_out.write(line)
+                    f_out.write("id\ttext\n")  # Add header
+                    f_out.write(first_line + '\n')  # Write the first line as data
+                    f_out.writelines(f_in)  # Write the rest of the file
             else:
+                # If the header exists, just copy the file as-is
                 with open(input_file, 'w') as f_out:
                     f_out.write(first_line + '\n')
-                    for line in f_in:
-                        f_out.write(line)
+                    f_out.writelines(f_in)
+
 
 
     def save_new_document(self, new_document):

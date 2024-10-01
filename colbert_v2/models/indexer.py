@@ -10,9 +10,8 @@ class ColBERTIndexer:
     def __init__(self, config, collection_path):
         self.config = config
 
-        FileProcessor.add_missing_headers(config.QUERIES_PATH)
         FileProcessor.add_missing_headers(config.COLLECTION_PATH)
-        
+
         self.queries = Queries(path=config.QUERIES_PATH)
         self.collection = Collection(path=config.COLLECTION_PATH)
     
