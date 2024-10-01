@@ -30,14 +30,15 @@ class FileProcessor:
 
         with open(input_file, 'w') as f_out:
             for line_idx, line in enumerate(lines):
-                # If it's the first line and it's not already the header, add the header
-                if line_idx == 0 and line.strip() != "id\ttext":
-                    f_out.write("id\ttext\n")
+                # If it's the first line and it's already the header, leave it as is
+                if line_idx == 0 and line.strip() == "id\ttext":
+                    f_out.write(line)  # Write the existing header
                 else:
                     # For all other lines, split by tab, replace the first value with the line index
                     parts = line.strip().split('\t', 1)
                     if len(parts) == 2:
                         f_out.write(f"{line_idx}\t{parts[1]}\n")
+
 
 
     def save_new_document(self, new_document):
