@@ -17,7 +17,7 @@ class ColBERTSearcher:
         self.queries_path = queries_path
 
     def search(self, ranking_output):
-        with Run().context(RunConfig(nranks=2, experiment='experiments')):
+        with Run().context(RunConfig(nranks=1, experiment='experiments')):
             config = ColBERTConfig(root="experiments")
             searcher = Searcher(index=self.config.INDEX_NAME, config=config)
             queries = Queries(queries)

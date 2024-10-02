@@ -16,7 +16,7 @@ class ColBERTIndexer:
         self.collection_path = collection_path
 
     def index_documents(self):
-        with Run().context(RunConfig(nranks=2, experiment='experiments')):
+        with Run().context(RunConfig(nranks=1, experiment='experiments')):
             config = ColBERTConfig(doc_maxlen=512, nbits=2)
             indexer = Indexer(checkpoint=self.config.CHECKPOINT, config=config)
             indexer.index(name=self.config.INDEX_NAME, collection=self.collection_path, overwrite=True)
