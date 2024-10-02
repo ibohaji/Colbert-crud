@@ -1,30 +1,28 @@
 # models/searcher.py
 from colbert import Searcher
-from colbert.infra import Run, RunConfig
+from colbert.infra import (
+Run,
+RunConfig,
+ColBERTConfig
+)
 from config import Config
 import argparse
+from colbert.data import Queries
 
 class ColBERTSearcher:
     def __init__(self, index_name):
         self.config = Config()
 
-    def search(self, query):
-        with Run().context(RunConfig(experiment='searching')):
-            searcher = Searcher(index=self.config.INDEX_NAME, config=self.config)
-            results = searcher.search(query, k=20)  
-
-        for passage_id, passage_rank, passage_score in zip(*results):
-            print(f"[{passage_rank}] {passage_score:.1f} - {searcher.collection[passage_id]}")
+    def search(self):
+        with Run().context(RunConfig(nranks=2, experiment='experiments')):
+            config = ColBERTConfig(root="experiments")
+            searcher = Searcher(index=self.config.INDEX_NAME, config=config)
+            queries = Queries(self.config.QUERIES_PATH)
+            ranking = searcher.search_all(queries, k=100)  
+            ranking.save('scifact.nbit=2.ranking.tsv')
 
 if __name__ == "__main__":
     ## parse args and call searcher
     config = Config()
     searcher = ColBERTSearcher(config.INDEX_NAME)
-    parser = argparse.ArgumentParser(
-                    prog='Colbertv2-Search',
-                    description='ColBERT IR System')
-    
-    parser.add_argument('query', type=str, help='Search query')
-    args = parser.parse_args()
-    query = args.query
-    searcher.search(query)
+    searcher.search()
