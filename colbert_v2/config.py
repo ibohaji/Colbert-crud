@@ -11,5 +11,5 @@ class Config:
     NCELLS = 4000  # Number of cells for coarse search
     NDOCS = 1000  # Number of documents to retrieve
     INDEX_NAME = "crud.colbert.index"
-    COLLECTION_PATH = "colbert_v2/data/collection.tsv"
+    COLLECTION_PATH = "colbert-datasets/scifact/collection.tsv"
     QUERIES_PATH = "colbert_v2/data/queries.tsv"

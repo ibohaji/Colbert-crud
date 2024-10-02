@@ -5,6 +5,7 @@ from colbert.data import Queries, Collection
 from config import Config
 import os 
 from data.collection import FileProcessor
+import argparse
 
 class ColBERTIndexer:
     def __init__(self, config, collection_path):
@@ -24,5 +25,9 @@ class ColBERTIndexer:
 
 if __name__ == "__main__":
     custom_config = Config()
-    indexer = ColBERTIndexer(custom_config, custom_config.COLLECTION_PATH)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--collection_path', type=str, default=custom_config.COLLECTION_PATH)
+    args = parser.parse_args()
+    collection_path = args.collection_path
+    indexer = ColBERTIndexer(custom_config, collection_path = args.collection_path)
     indexer.index_documents()

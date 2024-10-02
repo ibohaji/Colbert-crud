@@ -47,3 +47,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, help="BEIR Dataset Name, eg. nfcorpus")
     parser.add_argument('--split', type=str, default="test")
+    parser.add_argument('--data_dir', type=str, default=None, help='Path to a BEIR repository (incase already downloaded or custom)')
+    parser.add_argument('--collection', type=str, help='Path to store BEIR collection tsv file')
+    parser.add_argument('--queries', type=str, help='Path to store BEIR queries tsv file')
+    args = parser.parse_args()
+    main(**vars(args))
