@@ -1,6 +1,6 @@
 # main.py
 from models.searcher import ColBERTSearcher
-from models.indexer import ColBERTIndexer
+from colbert_v2.models.indexer import ColBERTIndexer
 from models.updater import ColBERTUpdater
 from config import Config
 

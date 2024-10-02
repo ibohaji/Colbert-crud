@@ -1,5 +1,5 @@
 # scripts/run_indexing.py
-from models.indexer import ColBERTIndexer
+from colbert_v2.models.indexer import ColBERTIndexer
 from config import Config
 
 if __name__ == "__main__":
