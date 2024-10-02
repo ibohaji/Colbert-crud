@@ -2,9 +2,9 @@
 from colbert import Indexer
 from colbert.infra import Run, RunConfig, ColBERTConfig
 from colbert.data import Queries, Collection
-from config import Config
+from ..config import Config
 import os 
-from data.collection import FileProcessor
+from ..data.collection import FileProcessor
 import argparse
 
 class ColBERTIndexer:

@@ -5,7 +5,7 @@ Run,
 RunConfig,
 ColBERTConfig
 )
-from config import Config
+from ..config import Config
 import argparse
 from colbert.data import Queries
 import argparse 
