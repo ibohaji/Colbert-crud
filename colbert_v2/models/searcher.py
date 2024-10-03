@@ -11,6 +11,7 @@ from colbert.data import Queries
 import argparse 
 import os 
 from time import time 
+import json
 
 class ColBERTSearcher:
     def __init__(self, index_name, queries_path):
@@ -29,9 +30,9 @@ class ColBERTSearcher:
             ranking.save('scifact.nbit=2.ranking.tsv')
 
         total_time = time() - start_time
-        with open("search_time.txt", "w") as f:
-            f.write(f"Total search time: {total_time} seconds")
-            
+        with open("search_time.json", "w") as f:
+            json.dump({"search_time": total_time}, f, indent=2)
+
 if __name__ == "__main__":
     ## parse args and call searcher
     parser = argparse.ArgumentParser()

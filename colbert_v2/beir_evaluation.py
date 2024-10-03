@@ -6,6 +6,7 @@ import pathlib, os, csv, random
 import sys
 import argparse
 import logging
+import json 
 
 #### Just some code to print debug information to stdout
 logging.basicConfig(format='%(asctime)s - %(message)s',
@@ -68,10 +69,9 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
         "Precision": precision,
     }
 
-    with open("colbert_metrics.txt", "w") as f:
-        f.write(f"Custom Model Metrics: {colbert_metrics}\n")
-        f.write(f"MRR: {mrr}\n")
-
+    with open("colbert_metrics.json", "w") as f:
+        json.dump(colbert_metrics, f, indent=2)
+        
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, help="BEIR Dataset Name, eg. nfcorpus")
