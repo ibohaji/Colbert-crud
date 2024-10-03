@@ -1,0 +1,9 @@
+colbert-ai 
+torch
+transformers
+faiss-gpu
+sentence-transformers
+tqdm
+pandas
+numpy
+scipy

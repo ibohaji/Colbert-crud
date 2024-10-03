@@ -1,1 +1,7 @@
 /myenv/
+**/__pycache__/
+**/queries.tsv
+*.pyc
+*.pyo
+*.tsv
+*

@@ -10,9 +10,9 @@ import argparse
 class ColBERTIndexer:
     def __init__(self, config, collection_path):
         self.config = config
-        # FileProcessor.add_missing_headers(config.COLLECTION_PATH)
-       #  FileProcessor.ensure_proper_header(config.COLLECTION_PATH)
-        #self.queries = Queries(path=config.QUERIES_PATH)
+        #  FileProcessor.add_missing_headers(config.COLLECTION_PATH)
+        #  FileProcessor.ensure_proper_header(config.COLLECTION_PATH)
+        #  self.queries = Queries(path=config.QUERIES_PATH)
         self.collection_path = collection_path
 
     def index_documents(self):
@@ -21,7 +21,6 @@ class ColBERTIndexer:
             indexer = Indexer(checkpoint=self.config.CHECKPOINT, config=config)
             indexer.index(name=self.config.INDEX_NAME, collection=self.collection_path, overwrite=True)
         print("Index created successfully!")
-
 
 if __name__ == "__main__":
     custom_config = Config()
