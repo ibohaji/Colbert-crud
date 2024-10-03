@@ -1,7 +1,7 @@
 from beir import util, LoggingHandler
 from beir.datasets.data_loader import GenericDataLoader
 from beir.retrieval.evaluation import EvaluateRetrieval
-
+import time 
 import pathlib, os, csv, random
 import sys
 import argparse
@@ -60,6 +60,17 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
         doc_id = scores_sorted[rank][0]
         # Format: Rank x: ID [Title] Body
         logging.info("Rank %d: %s [%s] - %s\n" % (rank+1, doc_id, corpus[doc_id].get("title"), corpus[doc_id].get("text")))
+
+    colbert_metrics = {
+        "NDCG": ndcg,
+        "MAP": _map,
+        "Recall": recall,
+        "Precision": precision,
+    }
+
+    with open("colbert_metrics.txt", "w") as f:
+        f.write(f"Custom Model Metrics: {colbert_metrics}\n")
+        f.write(f"MRR: {mrr}\n")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

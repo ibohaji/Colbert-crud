@@ -10,6 +10,7 @@ import argparse
 from colbert.data import Queries
 import argparse 
 import os 
+from time import time 
 
 class ColBERTSearcher:
     def __init__(self, index_name, queries_path):
@@ -17,7 +18,9 @@ class ColBERTSearcher:
         self.queries_path = queries_path
 
     def search(self, ranking_output):
+        start_time = time()
         with Run().context(RunConfig(nranks=1, experiment='experiments')):
+            start_time = time()
             config = ColBERTConfig(root="experiments")
             searcher = Searcher(index=self.config.INDEX_NAME, config=config)
             queries = Queries(self.queries_path)
@@ -25,6 +28,10 @@ class ColBERTSearcher:
             output_path = os.makdirs(ranking_output, exist_ok=True)
             ranking.save('scifact.nbit=2.ranking.tsv')
 
+        total_time = time() - start_time
+        with open("search_time.txt", "w") as f:
+            f.write(f"Total search time: {total_time} seconds")
+            
 if __name__ == "__main__":
     ## parse args and call searcher
     parser = argparse.ArgumentParser()
