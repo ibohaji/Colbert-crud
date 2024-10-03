@@ -26,7 +26,7 @@ class ColBERTSearcher:
             searcher = Searcher(index=self.config.INDEX_NAME, config=config)
             queries = Queries(self.queries_path)
             ranking = searcher.search_all(queries, k=100)  
-            output_path = os.makdirs(ranking_output, exist_ok=True)
+            output_path = os.makedirs(ranking_output, exist_ok=True)
             ranking.save('scifact.nbit=2.ranking.tsv')
 
         total_time = time() - start_time
