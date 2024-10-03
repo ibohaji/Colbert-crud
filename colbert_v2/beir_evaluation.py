@@ -59,6 +59,7 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
 
     for rank in range(top_k):
         doc_id = scores_sorted[rank][0]
+        logging.info("doc_id" % doc_id)
         # Format: Rank x: ID [Title] Body
         logging.info("Rank %d: %s [%s] - %s\n" % (rank+1, doc_id, corpus[doc_id].get("title"), corpus[doc_id].get("text")))
 
