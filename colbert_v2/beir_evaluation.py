@@ -27,13 +27,13 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
         out_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "datasets")
         data_dir = util.download_and_unzip(url, out_dir)
 
-    #### Provide the data_dir where nfcorpus has been downloaded and unzipped
+    #### Provide the data_dir where scifact has been downloaded and unzipped
     corpus, queries, qrels = GenericDataLoader(data_folder=data_dir).load(split=split)
 
     inv_map, results = {}, {}
       #### Document mappings (from original string to position in tsv file ####
     for idx, row in tsv_reader(collection):
-        inv_map[str(idx)] = row[0]
+        inv_map[str(idx)] = row[0] 
 
     #### Results ####
     for _, row in tsv_reader(rankings):
