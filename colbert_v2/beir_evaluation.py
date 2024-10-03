@@ -36,7 +36,7 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
     inv_map, results = {}, {}
       #### Document mappings (from original string to position in tsv file ####
     for idx, row in tsv_reader(collection):
-        inv_map[str(idx)] = row[0] 
+        inv_map[str(idx)] = row[1]  # Original doc_id is in row[1]
 
     #### Results ####
     for _, row in tsv_reader(rankings):
