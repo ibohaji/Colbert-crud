@@ -24,6 +24,7 @@ def tsv_reader(input_filepath):
 def main(dataset, split, data_dir, collection, rankings, k_values):
     #### Provide the data_dir where the corpus has been downloaded and unzipped
     if data_dir == None:
+        print("Downloading the dataset"*10)
         url = "https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{}.zip".format(dataset)
         out_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "datasets")
         data_dir = util.download_and_unzip(url, out_dir)
