@@ -21,31 +21,46 @@ def tsv_reader(input_filepath):
     for idx, row in enumerate(reader):
         yield idx, row
 
+def map_back(collection, corpus):
+    # Mapping from collection_id (sequential index) to corpus_id
+    mapping = {}
+
+    for idx, row in enumerate(tsv_reader(collection)):
+        corpus_doc = corpus[idx]  
+        corpus_id = corpus_doc["_id"]   
+        mapping[str(idx)] = corpus_id
+    
+    return mapping
+
+
+
 def main(dataset, split, data_dir, collection, rankings, k_values):
     #### Provide the data_dir where the corpus has been downloaded and unzipped
     """   
     if data_dir == None:
             print("Downloading the dataset\n"*10)
+            
             url = "https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{}.zip".format(dataset)
             out_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "datasets")
             data_dir = util.download_and_unzip(url, out_dir)
     """
+    
     #### Provide the data_dir where scifact has been downloaded and unzipped
     corpus, queries, qrels = GenericDataLoader(data_folder=data_dir).load(split=split)
-
+    true_map = map_back(collection, corpus)
     inv_map, results = {}, {}
       #### Document mappings (from original string to position in tsv file ####
     for idx, row in tsv_reader(collection):
-        inv_map[str(idx)] = row[1]  # Original doc_id is in row[1]
+        inv_map[str(idx)] = row[1]  
 
     #### Results ####
     for _, row in tsv_reader(rankings):
         qid, doc_id, rank = row[0], row[1], int(row[2])
-        if qid != inv_map[str(doc_id)]:
+        if qid != true_map[str(doc_id)]:
             if qid not in results:
-                results[qid] = {inv_map[str(doc_id)]: 1 / (rank + 1)}
+                results[qid] = {true_map[str(doc_id)]: 1 / (rank + 1)}
             else:
-                results[qid][inv_map[str(doc_id)]] = 1 / (rank + 1)
+                results[qid][true_map[str(doc_id)]] = 1 / (rank + 1)
 
     #### Evaluate your retrieval using NDCG@k, MAP@K ...
     evaluator = EvaluateRetrieval()
