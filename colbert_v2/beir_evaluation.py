@@ -24,10 +24,11 @@ def tsv_reader(input_filepath):
 def map_back(collection, corpus):
     # Mapping from collection_id (sequential index) to corpus_id
     mapping = {}
-
-    for idx, row in enumerate(tsv_reader(collection)):
+    doc_id_key = corpus.keys()
+    for doc_id_key, idx, row in zip(doc_id_key, enumerate(tsv_reader(collection))):
         # print the keys of the corpus
-        print(corpus.keys())
+        print(doc_id_key)
+        # Load first corpus id 
         corpus_doc = corpus[str(idx)]  
         corpus_id = corpus_doc["_id"]   
         mapping[str(idx)] = corpus_id
