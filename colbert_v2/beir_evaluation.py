@@ -26,7 +26,8 @@ def map_back(collection, corpus):
     mapping = {}
 
     for idx, row in enumerate(tsv_reader(collection)):
-      
+        # print the keys of the corpus
+        print(corpus.keys())
         corpus_doc = corpus[str(idx)]  
         corpus_id = corpus_doc["_id"]   
         mapping[str(idx)] = corpus_id
