@@ -94,6 +94,6 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, default=None, help='Path to a BEIR repository (incase already downloaded or custom)')
     parser.add_argument('--collection', type=str, help='Path to the ColBERT collection file')
     parser.add_argument('--rankings', required=True, type=str, help='Path to the ColBERT generated rankings file')
-    parser.add_argument('--k_values', nargs='+', type=int, default=[1,3,5,10,100])
+    parser.add_argument('--k_values', nargs='+', type=int, default=[1,3,5,10,100,1000])
     args = parser.parse_args()
     main(**vars(args))
