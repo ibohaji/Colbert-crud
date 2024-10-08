@@ -1,27 +1,20 @@
 # colbert_v2/train/trainer.py
-import torch
-from torch import nn, optim
+from colbert.infra.run import Run
+from colbert.infra.config import ColBERTConfig, RunConfig
+from colbert import Trainer
 
 class Trainer:
-    def __init__(self, encoder, dataloader):
-        self.encoder = encoder
-        self.dataloader = dataloader
-        self.loss_fn = nn.MarginRankingLoss(margin=1.0)
-        self.optimizer = optim.Adam(self.encoder.parameters(), lr=Config.LEARNING_RATE)
+    def __init__(self, experiment): 
+        pass 
 
-    def train(self, epochs=Config.EPOCHS):
-        for epoch in range(epochs):
-            for batch in self.dataloader:
-                queries, positives, negatives = batch  # Positive/negative pairs
-                pos_emb = self.encoder.encode(positives)
-                neg_emb = self.encoder.encode(negatives)
-                query_emb = self.encoder.encode(queries)
-                
-                pos_sim = LateInteraction.compute_similarity(query_emb, pos_emb)
-                neg_sim = LateInteraction.compute_similarity(query_emb, neg_emb)
-                
-                # Contrastive loss: higher similarity for positives
-                loss = self.loss_fn(pos_sim, neg_sim, torch.ones_like(pos_sim))
-                loss.backward()
-                self.optimizer.step()
-                self.optimizer.zero_grad()
+    
+    def train(self, checkpoint, nrank):
+        with Run().context(RunConfig(nranks=nrank)):
+                triples = '/path/to/examples.64.json'  # `wget https://huggingface.co/colbert-ir/colbertv2.0_msmarco_64way/resolve/main/examples.json?download=true` (26GB)
+                queries = '/path/to/MSMARCO/queries.train.tsv'
+                collection = '/path/to/MSMARCO/collection.tsv'
+
+                config = ColBERTConfig(bsize=32, lr=1e-05, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=64, accumsteps=1, similarity='cosine', use_ib_negatives=True)
+                trainer = Trainer(triples=triples, queries=queries, collection=collection, config=config)
+
+                trainer.train(checkpoint='colbert-ir/colbertv1.9')
