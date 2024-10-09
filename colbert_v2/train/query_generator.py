@@ -23,7 +23,7 @@ class QueryGenerator:
 
     def generate_queries(self, documents:Dict,batch_size:int = 16)->None:
         generated_queries = {}
-        doc_items = [(doc['_id'], "Title:" + doc['title'] + "\t" + doc['text']) for doc in documents]
+        doc_items = [(doc['_id'], doc['title'] + doc['text']) for doc in documents]
 
 
         if self.output_path:
@@ -37,6 +37,7 @@ class QueryGenerator:
                 batch_docs = doc_items[start_idx:start_idx+batch_size]
 
                 for doc_id, doc in batch_docs:
+                    print('\nThe batch docs are\n,',batch_docs)
                     input_ids = self.tokenizer.encode(
                         doc, 
                         max_length=512,
