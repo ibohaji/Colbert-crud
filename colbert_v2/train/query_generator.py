@@ -91,9 +91,12 @@ if __name__ =="__main__":
     
     args = parser.parse_args() 
     Qgen = QueryGenerator(args.model_name)
-
+    data = {}
     with open(args.input_documents) as f:
-        content = f.read()
-        data = json.loads(content)
+        #jsonl file containing the documents
+        for line in f:
+            doc = json.loads(line)
+            data.append(doc)
+
 
     Qgen.generate_queries(data) 
