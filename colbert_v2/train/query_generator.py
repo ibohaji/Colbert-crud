@@ -87,7 +87,7 @@ if __name__ =="__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--input_documents", type=str, required=True, help="Folder containing the documents") 
     parser.add_argument("--output_file", type=str, default=None, help="Folder to store the documents") 
-    parser.add_argument("--model_nmae", type=str, default='doc2query/S2ORC-t5-base-v1', help="Folder containing the documents") 
+    parser.add_argument("--model_name", type=str, default='doc2query/S2ORC-t5-base-v1', help="Folder containing the documents") 
     
     args = parser.parse_args() 
     Qgen = QueryGenerator(args.model_name)
