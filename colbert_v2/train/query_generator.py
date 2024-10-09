@@ -11,10 +11,14 @@ import argparse
 class QueryGenerator:
     def __init__(self, model_name:str, output_path = None)->None:
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
-        self.model = T5ForConditionalGeneration.from_pretrained(model_name)
+
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.output_path = output_path
         self.model.to(self.device)
+        self.device = "gpu" if torch.cuda.is_available() else "cpu"
+        self.model = T5ForConditionalGeneration.from_pretrained(model_name).model.to(self.device)
+
+
 
 
 
