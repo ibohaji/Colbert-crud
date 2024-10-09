@@ -38,7 +38,7 @@ class QueryGenerator:
 
                 for doc_id, doc in batch_docs:
                     input_ids = self.tokenizer.encode(
-                        doc['text'], 
+                        doc, 
                         max_length=512,
                         truncation=True, 
                         return_tensors='pt'
@@ -54,7 +54,7 @@ class QueryGenerator:
                 
                 queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
                 generated_queries[doc_id] = queries 
-                doc_text_clean = self._clean_text(doc['text'])
+                doc_text_clean = self._clean_text(doc)
 
                 for query in queries:
                     f.write(f"{query}\t{doc_text_clean}\n")
