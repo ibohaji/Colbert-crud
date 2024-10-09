@@ -14,7 +14,7 @@ class QueryGenerator:
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.output_path = output_path
-        self.device = "gpu" if torch.cuda.is_available() else "cpu"
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(self.device)
     
 
