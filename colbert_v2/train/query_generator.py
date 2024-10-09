@@ -91,7 +91,7 @@ if __name__ =="__main__":
     
     args = parser.parse_args() 
     Qgen = QueryGenerator(args.model_name)
-    data = {}
+    data = []
     with open(args.input_documents) as f:
         #jsonl file containing the documents
         for line in f:
