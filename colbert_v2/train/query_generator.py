@@ -23,7 +23,8 @@ class QueryGenerator:
 
     def generate_queries(self, documents:Dict,batch_size:int = 16)->None:
         generated_queries = {}
-        doc_items = list(documents.items())
+        doc_items = ["Title:" + doc['title'] + "\t" + doc['text'] for doc in documents]
+
 
         if self.output_path:
             os.makedirs(self.output_path, exist_ok=True) 
