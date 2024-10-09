@@ -32,12 +32,13 @@ class QueryGenerator:
             self.output_path = "generated_query_data"
             os.makedirs(self.output_path, exist_ok=True)
 
-        with open(f"{self.output_path}/generated_documents.tsv","w") as f: 
             for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
                 batch_docs = doc_items[start_idx:start_idx+batch_size]
 
                 for doc_id, doc in batch_docs:
                     print('\nThe batch docs are\n,',batch_docs)
+                    print('Doc ids are \n',doc_id)
+                    print('Docs are \n',doc)
                     input_ids = self.tokenizer.encode(
                         doc, 
                         max_length=512,
@@ -57,8 +58,6 @@ class QueryGenerator:
                 generated_queries[doc_id] = queries 
                 doc_text_clean = self._clean_text(doc)
 
-                for query in queries:
-                    f.write(f"{query}\t{doc_text_clean}\n")
         
 
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
