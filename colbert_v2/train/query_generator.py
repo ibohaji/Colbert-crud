@@ -17,12 +17,6 @@ class QueryGenerator:
         self.model.to(self.device)
 
 
-    def read_documents(self, document_folder:str) -> Dict[str,str]:
-        # Read documents from the specified folder
-        documents = {}
-        for filename in os.listdir(document_folder):
-            with open(os.path.join(document_folder, filename), "r", encoding="utf-8") as file:
-                documents[filename] = file.read()  
 
     @classmethod 
     def _removeNonAscii(s:str) -> str : return "".join(i for i in s if ord(i) < 128)
@@ -90,12 +84,15 @@ class QueryGenerator:
 if __name__ =="__main__": 
     
     parser = argparse.ArgumentParser() 
-    parser.add_argument("--document_folder", type=str, required=True, help="Folder containing the documents") 
-    parser.add_argument("--output_file", type=str, default=None, help="Folder containing the documents") 
+    parser.add_argument("--input_documents", type=str, required=True, help="Folder containing the documents") 
+    parser.add_argument("--output_file", type=str, default=None, help="Folder to store the documents") 
     parser.add_argument("--model_nmae", type=str, default='doc2query/S2ORC-t5-base-v1', help="Folder containing the documents") 
     
     args = parser.parse_args() 
     Qgen = QueryGenerator(args.model_name)
 
-    documents = Qgen.read_documents(args.document_folder) 
-    Qgen.generate_queries(documents) 
+    with open(args.input_documents) as f:
+        content = f.read()
+        data = json.loads(content)
+
+    Qgen.generate_queries(data) 
