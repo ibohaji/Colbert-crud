@@ -26,7 +26,7 @@ class QueryGenerator:
 
     def generate_queries(self, documents:Dict,batch_size:int = 16)->None:
         generated_queries = {}
-        doc_items = [(doc['_id'], doc['title'] + doc['text']) for doc in documents]
+        doc_items = [(doc['_id'], doc['text']) for doc in documents]
 
 
         if self.output_path:
