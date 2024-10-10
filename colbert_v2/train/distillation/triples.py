@@ -1,5 +1,5 @@
 from colbert.data import Ranking
-from ..custom.data_organizer import GenQueryData, CollectionData
+from ....custom.data_organizer import GenQueryData, CollectionData
 from sampler import HardNegativesSampler
 import json
 import ujson
