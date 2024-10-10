@@ -63,6 +63,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--generated_queries_path", type=str, required=True, help="Path to the generated queries")
     parser.add_argument("--collection_path", type=str, required=True, help="Path to the collection")
+    parser.add_argument("--host", type=str, default=None, help="Elasticsearch host")
     args = parser.parse_args()
     print('starting..')
-    main(args.generated_queries_path, args.collection_path)
+    main(args.generated_queries_path, args.collection_path, args.host)
