@@ -19,8 +19,14 @@ class HardNegativesSampler:
         self.queries = queries
 
     def setup_es_index(self):
+        logger.info(f"Setting up Elasticsearch index at {self.host}")
         es_searcher = EsSearcher()
-        es_searcher.index_documents(self.collection.collection_dict)
+        try:
+
+            es_searcher.index_documents(self.collection.collection_dict)
+        except Exception as e:
+            logger.error(f"Error indexing documents into Elasticsearch: {e}")
+            raise e
         logger.info(f"Indexed {len(self.collection.collection_dict)} documents into Elasticsearch")
         return es_searcher
 
