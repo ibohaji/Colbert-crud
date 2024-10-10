@@ -20,7 +20,7 @@ class HardNegativesSampler:
 
     def setup_es_index(self):
         logger.info(f"Setting up Elasticsearch index at {self.host}")
-        es_searcher = EsSearcher()
+        es_searcher = EsSearcher(host=self.host)
         try:
 
             es_searcher.index_documents(self.collection.collection_dict)
