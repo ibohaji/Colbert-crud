@@ -42,7 +42,7 @@ def generate_triples_with_colbert_logic(queries_data, hard_negatives):
     return triples
 
 
-def main(generated_queries_path, collection_path):
+def main(generated_queries_path, collection_path, host):
     print('starting...')
     queries_data = GenQueryData(generated_queries_path)
     collection_data = CollectionData(collection_path)
