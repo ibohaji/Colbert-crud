@@ -1,6 +1,6 @@
 from colbert.data import Ranking
 from colbert_v2 import GenQueryData, CollectionData
-from sampler import HardNegativesSampler
+from ..sampler import HardNegativesSampler
 import json
 import ujson
 import logging
