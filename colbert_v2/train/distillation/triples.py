@@ -52,11 +52,11 @@ def main(generated_queries_path, collection_path):
 
     triples = generate_triples_with_colbert_logic(queries_data, hard_negatives)
 
-    scores = compute_scores(triples, queries_data, collection_data)
+   # scores = compute_scores(triples, queries_data, collection_data)
 
-    scored_triples = integrate_scores(triples, scores)
+   # scored_triples = integrate_scores(triples, scores)
 
-    save_triples(scored_triples, 'path/to/scored_triples.json')
+    save_triples(triples, 'scored_triples.json')
 
 
 if __name__ == "__main__":

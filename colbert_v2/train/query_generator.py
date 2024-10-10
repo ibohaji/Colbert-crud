@@ -18,16 +18,12 @@ class QueryGenerator:
         self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(self.device)
     
 
-
-
-
     @classmethod 
     def _removeNonAscii(s:str) -> str : return "".join(i for i in s if ord(i) < 128)
 
     def generate_queries(self, documents:Dict,batch_size:int = 16)->None:
         generated_queries = {}
         doc_items = [(doc['_id'], doc['text']) for doc in documents]
-
 
         if self.output_path:
             os.makedirs(self.output_path, exist_ok=True) 
@@ -58,14 +54,16 @@ class QueryGenerator:
                     )
                 
                 queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
-                generated_queries[doc_id] = queries 
+                queries = self.remove_duplicates(queries)
+                generated_queries[doc_id] = queries
                 doc_text_clean = self._clean_text(doc)
 
-        
 
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
         return generated_queries
 
+    def remove_duplicates(self, generated_queries:list):
+        return list(set([query.lower() for query in generated_queries]))
 
     def save_queries_to_json(self, generated_queries, output_file):
         # Save generated queries to a JSON file
