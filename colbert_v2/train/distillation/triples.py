@@ -51,12 +51,12 @@ def main(generated_queries_path, collection_path):
     hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data).get_hard_negatives_all(num_negatives=3)
 
     triples = generate_triples_with_colbert_logic(queries_data, hard_negatives)
-
+    save_triples(triples, 'scored_triples.json')
+    print(f"saved triples to 'scored_triples.json")
    # scores = compute_scores(triples, queries_data, collection_data)
 
    # scored_triples = integrate_scores(triples, scores)
 
-    save_triples(triples, 'scored_triples.json')
 
 
 if __name__ == "__main__":
@@ -65,4 +65,5 @@ if __name__ == "__main__":
     parser.add_argument("--generated_queries_path", type=str, required=True, help="Path to the generated queries")
     parser.add_argument("--collection_path", type=str, required=True, help="Path to the collection")
     args = parser.parse_args()
+    print('starting..')
     main(args.generated_queries_path, args.collection_path)
