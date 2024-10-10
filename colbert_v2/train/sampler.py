@@ -3,6 +3,7 @@ import logging
 from ..custom.data_organizer import CollectionData, GenQueryData
 from .el_search import EsSearcher
 import nltk
+import tqdm
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -24,7 +25,7 @@ class HardNegativesSampler:
 
     def get_hard_negatives_all(self, num_negatives=3):
         hard_negatives = {}
-        for query_id, item in self.queries.queries_dict.items():
+        for query_id, item in tqdm.tqdm(self.queries.queries_dict.items()):
             query_text = item['text']
             positive_doc_id = item['doc_id']
             negatives = self.get_hard_negative_pids(query_text, positive_doc_id, num_negatives)
