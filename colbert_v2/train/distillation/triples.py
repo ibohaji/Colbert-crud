@@ -65,4 +65,4 @@ if __name__ == "__main__":
     parser.add_argument("--generated_queries_path", type=str, required=True, help="Path to the generated queries")
     parser.add_argument("--collection_path", type=str, required=True, help="Path to the collection")
     args = parser.parse_args()
-    main()
+    main(args.generated_queries_path, args.collection_path)
