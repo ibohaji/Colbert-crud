@@ -47,7 +47,7 @@ def main(generated_queries_path, collection_path, host):
     queries_data = GenQueryData(generated_queries_path)
     collection_data = CollectionData(collection_path)
 
-    hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data).get_hard_negatives_all(num_negatives=3)
+    hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, host).get_hard_negatives_all(num_negatives=3)
 
     triples = generate_triples_with_colbert_logic(queries_data, hard_negatives)
     save_triples(triples, 'scored_triples.json')
