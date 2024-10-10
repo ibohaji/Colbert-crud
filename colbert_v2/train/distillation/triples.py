@@ -5,7 +5,7 @@ import json
 import ujson
 import logging
 import argparse
-
+import tqdm
 
 def save_triples(scored_triples, output_path):
     with open(output_path, 'w') as f:
@@ -34,7 +34,7 @@ def compute_scores(triples, queries_data, collection_data):
 
 def generate_triples_with_colbert_logic(queries_data, hard_negatives):
     triples = []
-    for query_id, query_data in queries_data.queries_dict.items():
+    for query_id, query_data in tqdm(queries_data.queries_dict.items()):
         positive_doc_id = query_data['doc_id']
         negatives = hard_negatives.get(query_id, [])
         for negative_doc_id in negatives:
@@ -43,7 +43,7 @@ def generate_triples_with_colbert_logic(queries_data, hard_negatives):
 
 
 def main(generated_queries_path, collection_path):
-
+    print('starting...')
     queries_data = GenQueryData(generated_queries_path)
     collection_data = CollectionData(collection_path)
 
