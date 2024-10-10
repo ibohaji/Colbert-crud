@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 nltk.download('punkt')
 class HardNegativesSampler:
     def __init__(self, queries, collection, host):
-        self.host= host if host else'http://10.66.10.32:9200' 
+        self.host= host 
         self.collection = collection
         self.es = self.setup_es_index()
         self.index_name = 'documents'
@@ -22,7 +22,6 @@ class HardNegativesSampler:
         logger.info(f"Setting up Elasticsearch index at {self.host}")
         es_searcher = EsSearcher(host=self.host)
         try:
-
             es_searcher.index_documents(self.collection.collection_dict)
         except Exception as e:
             logger.error(f"Error indexing documents into Elasticsearch: {e}")

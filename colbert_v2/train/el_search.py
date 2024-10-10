@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class EsSearcher:
-    def __init__(self, host='http://localhost:9200'):
+    def __init__(self, host):
         try:
             self.es = Elasticsearch(host, timeout=30)
             self.index_name = 'documents'
