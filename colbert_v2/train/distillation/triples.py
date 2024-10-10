@@ -1,4 +1,3 @@
-from colbert.distillation.scorer import Scorer
 from colbert.data import Ranking
 from data_organizer import GenQueryData, CollectionData
 from sampler import HardNegativesSampler
@@ -24,13 +23,13 @@ def compute_scores(triples, queries_data, collection_data):
     queries = {qid: query['text'] for qid, query in queries_data.queries_dict.items()}
     collection = {doc['_id']: doc['text'] for doc in collection_data.collection_dict}
 
-    scorer = Scorer(queries, collection, model='cross-encoder/ms-marco-MiniLM-L-6-v2')
+    #scorer = Scorer(queries, collection, model='cross-encoder/ms-marco-MiniLM-L-6-v2')
 
     qids = [triple[0] for triple in triples]
     pids = [triple[1] for triple in triples]
     
-    scores = scorer.launch(qids, pids)
-    return scores
+  #  scores = scorer.launch(qids, pids)
+   # return scores
 
 
 def generate_triples_with_colbert_logic(queries_data, hard_negatives):
