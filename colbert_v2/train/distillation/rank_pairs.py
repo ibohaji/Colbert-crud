@@ -44,6 +44,11 @@ if __name__=="__main__":
     
     queries = queries.queries_dict
     queries = {qid: query['text'] for qid, query in queries.items()}
+    # save queries as a dictionary with qid as key and query text as value 
+    with open('queries_generated_mapping', 'w') as f:
+         f.write(json.dumps(queries))
+
+
     collection = collection.collection_dict
     collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
 
@@ -54,6 +59,6 @@ if __name__=="__main__":
         pids = [line.strip().strip('"') for line in f.readlines()]
 
     
-    main(qids, pids, collection, queries)
+    #main(qids, pids, collection, queries)
 
 

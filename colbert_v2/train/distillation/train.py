@@ -10,10 +10,31 @@ import tqdm
 import ujson
 import logging
 from logging import getLogger
+import csv
+
+
+
+
+def json_to_tsv(input_file, output_file):
+    is_jsonl = input_file.endswith('.jsonl')
+
+    with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', newline='', encoding='utf-8') as outfile:
+        writer = csv.writer(outfile, delimiter='\t')
+        writer.writerow(['id', 'text'])  
+
+        if is_jsonl:
+            for line in infile:
+                data = json.loads(line)
+                writer.writerow([data.get('id'), data.get('text')])
+        else:
+            data = json.load(infile)
+            for item in data:
+                writer.writerow([item.get('id'), item.get('text')])
 
 
 
 def run_distillation(triples, queries, collection):
+    
 
     with Run().context(RunConfig(nranks=1)):
 
@@ -40,6 +61,14 @@ if __name__ == "__main__":
     triples = args.triples_path
     queries = args.queries
     collection = args.collection
+
+    output_path_triples = 'triples.tsv'
+    output_path_queries = 'queries.tsv'
+    output_path_collection = 'collection.tsv'
+
+    json_to_tsv(triples, output_path_triples) 
+    json_to_tsv(queries, output_path_queries)
+    json_to_tsv(collection, output_path_collection)
 
     run_distillation(triples, queries, collection)
 
