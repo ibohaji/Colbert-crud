@@ -62,13 +62,11 @@ if __name__ == "__main__":
     queries = args.queries
     collection = args.collection
 
-    output_path_triples = 'triples.tsv'
     output_path_queries = 'queries.tsv'
     output_path_collection = 'collection.tsv'
 
-    json_to_tsv(triples, output_path_triples) 
     json_to_tsv(queries, output_path_queries)
     json_to_tsv(collection, output_path_collection)
 
-    run_distillation(triples, queries, collection)
+    run_distillation(triples, output_path_queries, output_path_collection)
 
