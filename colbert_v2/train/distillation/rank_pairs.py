@@ -54,6 +54,7 @@ if __name__=="__main__":
     with open(args.pid_path, 'r') as f:
         pids = [line.strip() for line in f.readlines()]
 
-    main(qids, pids, collection, queries)
+    print(f'queries[Q1] {queries["Q1"]}')
+    #main(qids, pids, collection, queries)
 
 
