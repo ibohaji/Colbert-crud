@@ -25,7 +25,7 @@ with open('queries_generated_mapping_altered.json', 'w') as f:
     f.write(json.dumps(altered_query, indent=4))
 
 
-with open('qids.json'):
+with open('qids.json') as f:
     qids = json.load(f)
 
 qids = [line.strip().strip('"') for line in f.readlines()]
@@ -41,4 +41,3 @@ for qid in qids:
 
 with open('qids_altered.json', 'w') as f:
     f.write(json.dumps(new_qids, indent=4))
-    
