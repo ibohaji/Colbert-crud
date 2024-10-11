@@ -44,18 +44,25 @@ with open('qids_altered.json', 'w') as f:
 
 
 """
-["Q19",[[8.6171875,"343052"],[-4.3125,"14834714"],[-2.154296875,"24998637"],[2.66796875,"7948486"]]]
-["Q20",[[2.0078125,"343052"],[1.849609375,"1360607"],[-6.19140625,"24998637"],[-9.7265625,"14834714"]]]
-["Q21",[[4.703125,"427082"],[-5.609375,"4932668"],[-7.2265625,"6148876"],[3.033203125,"38727075"]]]
-""""""
-with open('distillation_scores.json', 'r') as f:
-    input_data = json.load(f)
+input_file = 'distillation_scores.json'
+output_file = 'altered_distillation.json'
 
-altered_data = {}
-
-for key, values in input_data.items():
-    new_key = int(key.split('Q')[1])  
-    altered_data[new_key] = values
-
-with open('altered_distillation.json', 'w') as f:
-    json.dump(altered_data, f, indent=4)
+with open(input_file, 'r') as fin, open(output_file, 'w') as fout:
+    for line_number, line in enumerate(fin, start=1):
+        line = line.strip()
+        if not line:
+            continue  # Skip empty lines
+        try:
+            data = json.loads(line)
+            key = data[0]
+            if not key.startswith('Q'):
+                print(f"Warning: Line {line_number} key does not start with 'Q': {key}")
+                new_key = key  # or handle as needed
+            else:
+                new_key = key[1:]  # Remove the 'Q'
+            new_entry = [new_key, data[1]]
+            json.dump(new_entry, fout)
+            fout.write('\n')  # Write each JSON array on a new line
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON on line {line_number}: {e}")
+            # Handle or skip the malformed line as needed
