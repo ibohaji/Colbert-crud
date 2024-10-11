@@ -27,10 +27,12 @@ def generate_pairs(queries_data, hard_negatives):
     for query_id, query_data in tqdm.tqdm(queries_data.queries_dict.items()):
         positive_doc_id = query_data['doc_id']
         negatives = hard_negatives.get(query_id, [])
+        
         qids.append(query_id)
+        pids.append(positive_doc_id)
 
         for negative_doc_id in negatives:
-            pids.append(query_id)
+            qids.append(query_id)
             pids.append(negative_doc_id)
 
     return qids, pids
@@ -44,7 +46,7 @@ def main(generated_queries_path, collection_path, host):
     hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, host=host).get_hard_negatives_all(num_negatives=3)
     qids, pids = generate_pairs(queries_data, hard_negatives)
 
-    save_pairs(qids, 'pairs.json')
+    save_pairs(qids, 'qids.json')
     save_pairs(pids, 'pids.json')
     print("saved pairs")
 

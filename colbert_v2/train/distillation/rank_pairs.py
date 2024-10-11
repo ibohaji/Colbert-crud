@@ -9,6 +9,7 @@ import tqdm
 import ujson
 
 
+@wandb.config()
 def main(qid, pid, collection, queries):
     scorer = Scorer(queries=queries, collection=collection)
     distillation_scores = scorer.launch(qids, pids)
