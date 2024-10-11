@@ -37,20 +37,13 @@ def json_to_tsv(input_file, output_file):
 
 
 
-def run_distillation(triples, queries, collection):
+def run_distillation(triples_, queries_, collection_):
     
 
     with Run().context(RunConfig(nranks=1)):
-
-        triples = triples
-        queries = queries  # '/path/to/MSMARCO/queries.train.tsv'
-        collection = collection       #'/path/to/MSMARCO/collection.tsv'
-        print(f"Sample of triples: {triples[:5]}")
-        print(f"Sample of queries: {queries[:5]}")
-        print(f"Sample of collection: {collection[:5]}")
         
         config = ColBERTConfig(bsize=32, lr=1e-05, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=64, accumsteps=1, similarity='cosine', use_ib_negatives=True)
-        trainer = Trainer(triples=triples, queries=queries, collection=collection, config=config)
+        trainer = Trainer(triples=triples_, queries=queries_, collection=collection_, config=config)
         trainer.train(checkpoint='colbert-ir/colbertv1.9')
         
 
@@ -75,5 +68,7 @@ if __name__ == "__main__":
     json_to_tsv(queries, output_path_queries)
     json_to_tsv(collection, output_path_collection)
 
+# triples, queries, collection
+ 
     run_distillation(triples, output_path_queries, output_path_collection)
 
