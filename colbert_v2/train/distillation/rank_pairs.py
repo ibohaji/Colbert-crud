@@ -1,19 +1,24 @@
-from ....ColBERT.colbert.distillation.scorer import Scorer
-from ....ColBERT.colbert.distillation.ranking_scorer import RankingScorer
-from ....ColBERT.colbert.infra import Run
+from colbert.distillation.scorer import Scorer
+from colbert.distillation.ranking_scorer import RankingScorer
+from colbert.infra import Run
+from colbert.infra.config import RunConfig
 from collections import defaultdict
-import wandb
+from ...custom.data_organizer import CollectionData, GenQueryData
 import argparse
 import json 
 import tqdm
 import ujson
 
 
-@wandb.config()
+
+
+
 def main(qid, pid, collection, queries):
-    scorer = Scorer(queries=queries, collection=collection)
-    distillation_scores = scorer.launch(qids, pids)
-    scores_by_qid = defaultdict(list)
+    with Run().context(RunConfig(nranks=2)):
+
+        scorer = Scorer(queries=queries, collection=collection)
+        distillation_scores = scorer.launch(qids, pids)
+        scores_by_qid = defaultdict(list)
     for qid, pid, score in tqdm.tqdm(zip(qids, pids, distillation_scores)):
         scores_by_qid[qid].append((score, pid))
 
@@ -35,18 +40,19 @@ if __name__=="__main__":
 
     arg = parser.parse_args()
 
-
-    with open(arg.collection_path, 'r') as f:
-        collection = json.load(f)
+    queries = GenQueryData(arg.queries_path)
+    collection = CollectionData(arg.collection_path)
     
-    with open(arg.queries_path, 'r') as f:
-        queries = json.load(f)
-
+    queries = queries.queries_dict
+    collection = collection.collection_dict
+    collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
 
     with open(arg.pid_path, 'r') as f:
         pids = json.load(f)
     
     with open(arg.qid_path, 'r') as f:
         qids = json.load(f)
+
+    main(qids, pids, collection, queries)
 
 
