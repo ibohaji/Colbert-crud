@@ -1,7 +1,6 @@
 from colbert.infra import Run
 from colbert.infra.config import RunConfig
-from colbert.distillation.scorer import Scorer
-from colbert.distillation.ranking_scorer import RankingScorer
+from .scorer import Scorer
 from collections import defaultdict
 from ...custom.data_organizer import CollectionData, GenQueryData
 import argparse
@@ -12,13 +11,14 @@ import ujson
 
 
 
-
 def main(qid, pid, collection, queries):
     with Run().context(RunConfig(nranks=2)):
 
         scorer = Scorer(queries=queries, collection=collection)
         distillation_scores = scorer.launch(qids, pids)
         scores_by_qid = defaultdict(list)
+
+        
     for qid, pid, score in tqdm.tqdm(zip(qids, pids, distillation_scores)):
         scores_by_qid[qid].append((score, pid))
 
