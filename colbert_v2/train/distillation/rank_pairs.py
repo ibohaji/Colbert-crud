@@ -38,10 +38,10 @@ if __name__=="__main__":
     parser.add_argument('--collection_path', type=str, required=True)
     parser.add_argument('--queries_path', type=str, required=True)
 
-    arg = parser.parse_args()
+    args = parser.parse_args()
 
-    queries = GenQueryData(arg.queries_path)
-    collection = CollectionData(arg.collection_path)
+    queries = GenQueryData(args.queries_path)
+    collection = CollectionData(args.collection_path)
     
     queries = queries.queries_dict
     collection = collection.collection_dict
