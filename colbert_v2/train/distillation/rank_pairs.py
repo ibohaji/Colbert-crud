@@ -1,7 +1,7 @@
-from colbert.distillation.scorer import Scorer
-from colbert.distillation.ranking_scorer import RankingScorer
 from colbert.infra import Run
 from colbert.infra.config import RunConfig
+from colbert.distillation.scorer import Scorer
+from colbert.distillation.ranking_scorer import RankingScorer
 from collections import defaultdict
 from ...custom.data_organizer import CollectionData, GenQueryData
 import argparse
