@@ -2,14 +2,12 @@ import json
 import logging
 from ..custom.data_organizer import CollectionData, GenQueryData
 from .el_search import EsSearcher
-import nltk
 import tqdm
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-nltk.download('punkt')
 class HardNegativesSampler:
     def __init__(self, queries, collection, host):
         self.host= host 
@@ -20,7 +18,12 @@ class HardNegativesSampler:
 
     def setup_es_index(self):
         logger.info(f"Setting up Elasticsearch index at {self.host}")
-        es_searcher = EsSearcher(host=self.host)
+        try:
+
+            es_searcher = EsSearcher(host=self.host)
+        except Exception as e:
+            logger.error(f"Error setting up Elasticsearch index: {e}")
+            raise e
         try:
             es_searcher.index_documents(self.collection.collection_dict)
         except Exception as e:

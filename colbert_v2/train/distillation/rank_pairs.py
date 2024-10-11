@@ -10,10 +10,8 @@ import ujson
 
 
 def main(qid, pid, collection, queries):
-
     scorer = Scorer(queries=queries, collection=collection)
     distillation_scores = scorer.launch(qids, pids)
-
     scores_by_qid = defaultdict(list)
     for qid, pid, score in tqdm.tqdm(zip(qids, pids, distillation_scores)):
         scores_by_qid[qid].append((score, pid))
