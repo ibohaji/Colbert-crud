@@ -45,9 +45,8 @@ if __name__=="__main__":
     queries = queries.queries_dict
     queries = {qid: query['text'] for qid, query in queries.items()}
     # save queries as a dictionary with qid as key and query text as value 
-    with open('queries_generated_mapping', 'w') as f:
-         f.write(json.dumps(queries))
-
+    with open('queries_generated_mapping.json', 'w') as f:
+        f.write(json.dumps(queries, indent=4))
 
     collection = collection.collection_dict
     collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
