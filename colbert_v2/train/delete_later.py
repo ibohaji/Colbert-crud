@@ -26,7 +26,6 @@ with open('queries_generated_mapping_altered.json', 'w') as f:
 
 
 with open('qids.json', 'r') as f:
-    qids = json.load(f)
     qids = [line.strip().strip('"') for line in f.readlines()]
 
 
