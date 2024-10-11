@@ -14,7 +14,6 @@ import csv
 
 
 
-
 def json_to_tsv(input_file, output_file):
     is_jsonl = input_file.endswith('.jsonl')
 
@@ -25,11 +24,16 @@ def json_to_tsv(input_file, output_file):
         if is_jsonl:
             for line in infile:
                 data = json.loads(line)
-                writer.writerow([data.get('id'), data.get('text')])
+                if isinstance(data, dict):
+                    writer.writerow([data.get('id'), data.get('text')])
         else:
             data = json.load(infile)
-            for item in data:
-                writer.writerow([item.get('id'), item.get('text')])
+            if isinstance(data, list):
+                for item in data:
+                    writer.writerow([item.get('id'), item.get('text')])
+            elif isinstance(data, dict):
+                for key, value in data.items():
+                    writer.writerow([key, value])
 
 
 
