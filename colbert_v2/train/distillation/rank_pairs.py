@@ -22,7 +22,7 @@ def main(qid, pid, collection, queries):
     for qid, pid, score in tqdm.tqdm(zip(qids, pids, distillation_scores)):
         scores_by_qid[qid].append((score, pid))
 
-        with Run().open('distillation_scores.json', 'w') as f:
+        with open('distillation_scores.json', 'w') as f:
             for qid in tqdm.tqdm(scores_by_qid):
                 obj = (qid, scores_by_qid[qid])
                 f.write(ujson.dumps(obj) + '\n')
