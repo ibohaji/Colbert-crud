@@ -12,7 +12,7 @@ import ujson
 
 
 def main(qid, pid, collection, queries):
-    with Run().context(RunConfig(nranks=2)):
+    with Run().context(RunConfig(nranks=1)):
 
         scorer = Scorer(queries=queries, collection=collection)
         distillation_scores = scorer.launch(qids, pids)
