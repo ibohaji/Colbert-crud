@@ -49,16 +49,12 @@ if __name__=="__main__":
     collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
 
     with open(args.qid_path, 'r') as f:
-        qids = [line.strip() for line in f.readlines()]
+        qids = [line.strip().strip('"') for line in f.readlines()]
 
-    # For pids
     with open(args.pid_path, 'r') as f:
-        pids = [line.strip() for line in f.readlines()]
+        pids = [line.strip().strip('"') for line in f.readlines()]
 
-    print(f'queries[Q1] {queries["Q1"]}')
-    print(f'qids[0] {qids[0]}')
-    print(f'pids[0] {pids[0]}')
-    print(f'collection[4983] {collection["4983"]}')
-    #main(qids, pids, collection, queries)
+    
+    main(qids, pids, collection, queries)
 
 
