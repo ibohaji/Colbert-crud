@@ -11,24 +11,23 @@ import ujson
 
 
 
-def main(qid, pid, collection, queries):
+def main(qids, pids, collection, queries):
     with Run().context(RunConfig(nranks=1)):
 
         scorer = Scorer(queries=queries, collection=collection)
         distillation_scores = scorer.launch(qids, pids)
-        scores_by_qid = defaultdict(list)
 
-
+    scores_by_qid = defaultdict(list)
     for qid, pid, score in tqdm.tqdm(zip(qids, pids, distillation_scores)):
         scores_by_qid[qid].append((score, pid))
 
-        with open('distillation_scores.json', 'w') as f:
-            for qid in tqdm.tqdm(scores_by_qid):
-                obj = (qid, scores_by_qid[qid])
-                f.write(ujson.dumps(obj) + '\n')
+    with open('distillation_scores.json', 'w') as f:
+        for qid in tqdm.tqdm(scores_by_qid):
+            obj = (qid, scores_by_qid[qid])
+            f.write(ujson.dumps(obj) + '\n')
 
-            output_path = f.name
-            print(f"Saved distillation scores to {output_path}")
+        output_path = f.name
+        print(f"Saved distillation scores to {output_path}")
 
 
 if __name__=="__main__": 
