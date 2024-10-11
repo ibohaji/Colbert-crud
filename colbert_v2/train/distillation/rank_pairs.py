@@ -56,6 +56,8 @@ if __name__=="__main__":
         pids = [line.strip() for line in f.readlines()]
 
     print(f'queries[Q1] {queries["Q1"]}')
+    print(f'qids[0] {qids[0]}')
+    print(f'pids[0] {pids[0]}')
     print(f'collection[4983] {collection["4983"]}')
     #main(qids, pids, collection, queries)
 
