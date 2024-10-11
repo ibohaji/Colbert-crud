@@ -47,11 +47,12 @@ if __name__=="__main__":
     collection = collection.collection_dict
     collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
 
-    with open(arg.pid_path, 'r') as f:
-        pids = json.load(f)
-    
-    with open(arg.qid_path, 'r') as f:
-        qids = json.load(f)
+    with open(args.qid_path, 'r') as f:
+        qids = [line.strip() for line in f.readlines()]
+
+    # For pids
+    with open(args.pid_path, 'r') as f:
+        pids = [line.strip() for line in f.readlines()]
 
     main(qids, pids, collection, queries)
 
