@@ -19,7 +19,6 @@ def json_to_tsv(input_file, output_file):
 
     with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', newline='', encoding='utf-8') as outfile:
         writer = csv.writer(outfile, delimiter='\t')
-        writer.writerow(['id', 'text'])  
 
         if is_jsonl:
             for line in infile:
