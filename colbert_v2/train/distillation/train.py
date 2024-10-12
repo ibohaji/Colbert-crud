@@ -22,7 +22,7 @@ def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
 
 
 def json_to_tsv(input_file, output_file):
-    is_jsonl = input_file.endswith('.jsonl')
+    is_jsonl = input_file.endswith('.json')
 
     with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', newline='', encoding='utf-8') as outfile:
         writer = csv.writer(outfile, delimiter='\t')
