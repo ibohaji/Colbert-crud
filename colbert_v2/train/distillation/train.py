@@ -54,6 +54,8 @@ def convert_jsonl_with_scores(input_jsonl_path, output_jsonl_path):
                 scores = [pair[0] for pair in pids_scores]
                 new_entry = [query_id, pids, scores]
                 outfile.write(json.dumps(new_entry) + '\n')
+                print(f'Sample of the converted file {output_jsonl_path}:')
+
             except Exception as e:
                 print(f"Error processing line: {line}")
                 print(e)
@@ -67,7 +69,7 @@ def convert_jsonl_with_scores(input_jsonl_path, output_jsonl_path):
 def run_distillation(triples_, queries_, collection_):
 
     with Run().context(RunConfig(nranks=1)):
-        config = ColBERTConfig(bsize=32, lr=1e-05, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=64, accumsteps=1, similarity='cosine', use_ib_negatives=True)
+        config = ColBERTConfig(bsize=32, lr=1e-05, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=4, accumsteps=1, similarity='cosine', use_ib_negatives=True)
         trainer = Trainer(triples=triples_, queries=queries_, collection=collection_, config=config)
         trainer.train(checkpoint='colbert-ir/colbertv1.9')
         
@@ -85,12 +87,5 @@ if __name__ == "__main__":
     queries = args.queries
     collection = args.collection
 
-    output_path_collection = 'collection.tsv'
-    output_path_queries = 'queries.json'
-    output_path_triples = 'triples_scores.json'
-    convert_jsonl_with_scores(triples, output_path_triples)
 
-    
-    json_to_tsv(collection, output_path_collection)
-    convert_json_file_to_jsonl(queries, output_path_queries)
-    run_distillation(output_path_triples, output_path_queries, output_path_collection)
+    run_distillation('triples_scores.json', 'queries.json', 'collection.tsv')
