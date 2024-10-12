@@ -12,6 +12,12 @@ import logging
 from logging import getLogger
 import csv
 
+
+#################### ALL THESE CONVERSION FUNCTION ARE NEEDED CAUSE COLBERT IS INCONSISTENT WITH ITS INPUT FORMATS ####################
+#################### AND CONTAIN A LOT OF BUGS IN ITS CODE ####################
+#################### THESE FUNCTIONS ARE USED TO CONVERT THE INPUT DATA TO THE FORMAT COLBERT EXPECTS ####################
+#################### NEED TO BE DELETED AND INTEGRATED INTO THE MAIN SCRIPT ####################
+
 def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
     with open(input_json_path, 'r') as json_file:
         input_json = json.load(json_file)
@@ -33,6 +39,28 @@ def json_to_tsv(input_file, output_file):
 
             writer.writerow([key, combined_value])
 
+
+def convert_jsonl_with_scores(input_jsonl_path, output_jsonl_path):
+    """
+    Converts JSONL data from ["query_id", [[score, pid], ...]] to
+    ["query_id", [pid1, pid2, ...], [score1, score2, ...]]
+    """
+    with open(input_jsonl_path, 'r', encoding='utf-8') as infile, \
+         open(output_jsonl_path, 'w', encoding='utf-8') as outfile:
+        for line in infile:
+            try:
+                query_id, pids_scores = json.loads(line)
+                pids = [pair[1] for pair in pids_scores]
+                scores = [pair[0] for pair in pids_scores]
+                new_entry = [query_id, pids, scores]
+                outfile.write(json.dumps(new_entry) + '\n')
+            except Exception as e:
+                print(f"Error processing line: {line}")
+                print(e)
+
+######################################################################################################################################
+######################################################################################################################################
+######################################################################################################################################
 
 
 
@@ -59,7 +87,10 @@ if __name__ == "__main__":
 
     output_path_collection = 'collection.tsv'
     output_path_queries = 'queries.json'
+    output_path_triples = 'triples_scores.json'
+    convert_jsonl_with_scores(triples, output_path_triples)
 
+    
     json_to_tsv(collection, output_path_collection)
     convert_json_file_to_jsonl(queries, output_path_queries)
-    run_distillation(triples, output_path_queries, output_path_collection)
+    run_distillation(output_path_triples, output_path_queries, output_path_collection)
