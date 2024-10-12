@@ -12,6 +12,10 @@ import logging
 from logging import getLogger
 import csv
 
+def convert_json_to_jsonl_file(input_json, output_path):
+    with open(output_path, 'w') as jsonl_file:
+        for key, value in input_json.items():
+            jsonl_file.write(json.dumps({key: value}) + '\n')
 
 
 def json_to_tsv(input_file, output_file):
@@ -62,10 +66,12 @@ if __name__ == "__main__":
     collection = args.collection
 
     output_path_collection = 'collection.tsv'
+    output_path_queries = 'queries.jsonl'
 
+
+    convert_json_to_jsonl_file(queries, output_path_queries)
     json_to_tsv(collection, output_path_collection)
 
-# triples, queries, collection
  
-    run_distillation(triples, queries, output_path_collection)
+    run_distillation(triples, output_path_queries, output_path_collection)
 
