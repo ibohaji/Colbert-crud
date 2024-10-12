@@ -18,11 +18,6 @@ with open('collection_data_altered.json', 'w') as f:
     f.write(json.dumps(new_data, indent=4))
 
 
-############################### Now convert the rest of the data ##################################
-# ["1", [[-0.55712890625, "97884"], [-2.26171875, "6853699"], [-5.4921875, "22371455"], [-6.2734375, "12880573"]]] 
-# ["2", [[-0.55712890625, "97884"], [-2.26171875, "6853699"], [-5.4921875, "22371455"], [-6.2734375, "12880573"]]]
-# .. 
-#.json 
 
 
 def process_json_file(input_path, output_path, mapping):
@@ -88,5 +83,3 @@ def process_json_file(input_path, output_path, mapping):
                 print(f"Unexpected error on line {line_number}: {e}. Skipping this line.")
 
 process_json_file('altered_distillation.json', 'altered_distillations_scores.json', mapping)
-#["1", [[-0.55712890625, 15], [-2.26171875, 1259], [-5.4921875, 3308], [-6.2734375, 2109]]]
-#,[[-0.55712890625,"97884"],[-2.26171875,"6853699"],[-5.4921875,"22371455"],[-6.2734375,"12880573"]]]
