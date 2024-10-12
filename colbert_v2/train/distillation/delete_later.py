@@ -62,7 +62,15 @@ def process_json_file(input_path, output_path, mapping):
                         print(f"Warning: Line {line_number} has an invalid pair format: {pair}. Skipping this pair.")
                         continue
                     score, old_id = pair
-                    new_id = mapping.get(old_id, old_id)  # Keep original ID if not found
+
+
+                    try:
+
+                        new_id = int(mapping[old_id])
+                    except KeyError:
+                        print(f"Warning: Line {line_number} ID '{old_id}' not found in mapping. Keeping original ID.")
+                        raise KeyError
+                    
                     if old_id not in mapping:
                         print(f"Warning: Line {line_number} ID '{old_id}' not found in mapping. Keeping original ID.")
                     updated_scores_ids.append([score, new_id])
@@ -80,3 +88,5 @@ def process_json_file(input_path, output_path, mapping):
                 print(f"Unexpected error on line {line_number}: {e}. Skipping this line.")
 
 process_json_file('altered_distillation.json', 'altered_distillations_scores.json', mapping)
+#["1", [[-0.55712890625, 15], [-2.26171875, 1259], [-5.4921875, 3308], [-6.2734375, 2109]]]
+#,[[-0.55712890625,"97884"],[-2.26171875,"6853699"],[-5.4921875,"22371455"],[-6.2734375,"12880573"]]]
