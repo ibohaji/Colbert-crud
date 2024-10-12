@@ -71,7 +71,7 @@ if __name__ == "__main__":
     output_path_collection = 'collection.tsv'
     output_path_queries = 'queries.json'
 
-
+    json_to_tsv(collection, output_path_collection)
     convert_json_file_to_jsonl(queries, output_path_queries)
-    run_distillation(triples, output_path_queries, collection)
+    run_distillation(triples, output_path_queries, output_path_collection)
 
