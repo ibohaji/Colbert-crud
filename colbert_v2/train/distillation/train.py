@@ -18,7 +18,7 @@ def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
     
     with open(output_jsonl_path, 'w') as jsonl_file:
         for key, value in input_json.items():
-            jsonl_file.write(json.dumps({key: value}) + '\n')
+            jsonl_file.write(json.dumps({"qid": key, "question": value}) + '\n')
 
 
 def json_to_tsv(input_file, output_file):
