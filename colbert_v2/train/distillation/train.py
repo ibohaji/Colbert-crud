@@ -12,8 +12,11 @@ import logging
 from logging import getLogger
 import csv
 
-def convert_json_to_jsonl_file(input_json, output_path):
-    with open(output_path, 'w') as jsonl_file:
+def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
+    with open(input_json_path, 'r') as json_file:
+        input_json = json.load(json_file)
+    
+    with open(output_jsonl_path, 'w') as jsonl_file:
         for key, value in input_json.items():
             jsonl_file.write(json.dumps({key: value}) + '\n')
 
