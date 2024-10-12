@@ -79,4 +79,4 @@ def process_json_file(input_path, output_path, mapping):
             except Exception as e:
                 print(f"Unexpected error on line {line_number}: {e}. Skipping this line.")
 
-process_json_file('altered_distillation.json.json', 'altered_distillations_scores', mapping)
+process_json_file('altered_distillation.json', 'altered_distillations_scores', mapping)
