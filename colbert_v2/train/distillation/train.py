@@ -69,7 +69,7 @@ if __name__ == "__main__":
     collection = args.collection
 
     output_path_collection = 'collection.tsv'
-    output_path_queries = 'queries.jsonl'
+    output_path_queries = 'queries.json'
 
 
     convert_json_file_to_jsonl(queries, output_path_queries)
