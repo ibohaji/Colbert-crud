@@ -21,20 +21,17 @@ def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
             jsonl_file.write(json.dumps({"qid": key, "question": value}) + '\n')
 
 def json_to_tsv(input_file, output_file):
-    is_jsonl = input_file.endswith('.jsonl')  
     with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', newline='', encoding='utf-8') as outfile:
         writer = csv.writer(outfile, delimiter='\t')
 
-        if is_jsonl:
-            for line in infile:
-                data = json.loads(line)
-                if isinstance(data, dict):
-                    writer.writerow([data.get('_id'), data.get('text')])
-        else:
-            data = json.load(infile) 
-            if isinstance(data, dict):
-                for key, value in data.items():
-                    writer.writerow([value.get('_id'), value.get('text')])
+        data = json.load(infile)
+
+        for key, value in data.items():
+            title = value.get('title', '')
+            text = value.get('text', '')
+            combined_value = title + " " + text
+
+            writer.writerow([key, combined_value])
 
 
 
