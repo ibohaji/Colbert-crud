@@ -60,6 +60,26 @@ def convert_jsonl_with_scores(input_jsonl_path, output_jsonl_path):
                 print(f"Error processing line: {line}")
                 print(e)
 
+
+def convert_quirky_json(input_file, output_file):
+    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        for line in infile:
+            try:
+                # Load each line of JSON data
+                entry = json.loads(line.strip())
+                query_id, pids_scores = entry
+                
+                # Swap the order of score and pid in each inner list
+                formatted_entry = [query_id] + [[pid, score] for score, pid in pids_scores]
+                
+                # Write the correctly formatted entry back to the output file
+                outfile.write(json.dumps(formatted_entry) + '\n')
+            
+            except json.JSONDecodeError as e:
+                print(f"Failed to decode JSON on line: {line}. Error: {e}")
+            except Exception as e:
+                print(f"Error processing line: {line}. Error: {e}")
+
 ######################################################################################################################################
 ######################################################################################################################################
 ######################################################################################################################################
@@ -86,6 +106,8 @@ if __name__ == "__main__":
     triples = args.triples_path
     queries = args.queries
     collection = args.collection
-
+    output= 'triples_scores.json'
+    input = 'altered_distillations_scores.json'
+    convert_quirky_json(input, output)
 
     run_distillation('triples_scores.json', 'queries.json', 'collection.tsv')
