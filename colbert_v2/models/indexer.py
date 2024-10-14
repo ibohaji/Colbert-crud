@@ -6,6 +6,7 @@ from ..config import Config
 import os 
 from ..data.collection import FileProcessor
 import argparse
+from ..config import MetaData
 
 class ColBERTIndexer:
     def __init__(self, config, collection_path):
@@ -26,7 +27,9 @@ if __name__ == "__main__":
     custom_config = Config()
     parser = argparse.ArgumentParser()
     parser.add_argument('--collection_path', type=str, default=custom_config.COLLECTION_PATH)
+    parser.add_argument('--experiment', type=str, default="experiments")
     args = parser.parse_args()
+    MetaData.update(EXPERIMENT_ID=args.experiment)
     collection_path = args.collection_path
     indexer = ColBERTIndexer(custom_config, collection_path = args.collection_path)
     indexer.index_documents()

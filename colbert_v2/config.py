@@ -39,41 +39,42 @@ class MetaData():
     SEED: int
 
 
-def singleton(cls):
-    instances = {}
-    def get_instance(*args, **kwargs):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kwargs)
-        return instances[cls]
-    return get_instance
+def Singleton(cls):
+    _instances = {}
+    def __new__(*args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__new__(cls)
+        return _instances[cls]
 
-@singleton
-class MetaData:
+
+class MetaData(metaclass=Singleton):
     def __init__(self):
         self.EXPERIMENT_ID = None
-        self.NWAY = 0
-        self.BSIZE = 0
-        self.NDCG = 0.0
+        self.NWAY = None
+        self.BSIZE = None
+        self.NDCG = None
         self.SAMPLING_METHOD = ''
+        self.LR = None
+        self.WARMUP = None
+        self.BASE_MODEL = ''
+        self.EPOCHS = None
+        self.top_p =None
+        self.num_genq = None
+        self.NUM_QUERIES = None
+        self.NUM_COLLECTION = None
+        self.GPU_TYPE = ''
+        self.NUM_GPUS = None
+        self.CHECKPOINT_PATH = ''
+        self.TRAINING_TIME = None
+        self.DISTILLATION_TIME = None
+        self.EVALUATION_TIME =None
+        self.SEED = None
+
+
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
-
-    
-@singleton
-class MetaData:
-    def __init__(self):
-        self.EXPERIMENT_ID = None
-        self.NWAY = 0
-        self.BSIZE = 0
-        self.NDCG = 0.0
-        self.SAMPLING_METHOD = ''
-
-    def update(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
 
     def save_results(self, file_path='/experiment_results/'):
         """ Save the metadata to a JSON file """
@@ -81,6 +82,7 @@ class MetaData:
         file_name = file_path + self.EXPERIMENT_ID +'_'+ 'metadata.json'
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
+
         print(f"MetaData saved to {file_path}")
 
 

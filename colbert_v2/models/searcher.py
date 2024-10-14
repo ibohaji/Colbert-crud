@@ -12,6 +12,8 @@ import argparse
 import os 
 from time import time 
 import json
+from ..config import MetaData
+
 
 class ColBERTSearcher:
     def __init__(self, index_name, queries_path):
@@ -30,6 +32,9 @@ class ColBERTSearcher:
             ranking.save('scifact.nbit=2.ranking.tsv')
 
         total_time = time() - start_time
+
+        MetaData.update(Search_time=total_time)
+        
         with open("search_time.json", "w") as f:
             json.dump({"search_time": total_time}, f, indent=2)
 
@@ -38,6 +43,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--Queries', type=str, default="crud.colbert.index")
     parser.add_argument('--output_path', type=str, help='Path to store rankings')
+    parser.add_argument('--experiment', type=str, default="scifact")
     args = parser.parse_args()
     queries = args.Queries 
     output = args.output_path
