@@ -65,14 +65,11 @@ def convert_quirky_json(input_file, output_file):
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
         for line in infile:
             try:
-                # Load each line of JSON data
                 entry = json.loads(line.strip())
                 query_id, pids_scores = entry
                 
-                # Swap the order of score and pid in each inner list
                 formatted_entry = [query_id] + [[pid, score] for score, pid in pids_scores]
                 
-                # Write the correctly formatted entry back to the output file
                 outfile.write(json.dumps(formatted_entry) + '\n')
             
             except json.JSONDecodeError as e:

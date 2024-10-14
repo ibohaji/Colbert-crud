@@ -98,6 +98,4 @@ if __name__ =="__main__":
         for line in f:
             doc = json.loads(line)
             data.append(doc)
-
-
     Qgen.generate_queries(data) 

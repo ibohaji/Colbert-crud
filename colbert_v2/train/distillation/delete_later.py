@@ -16,9 +16,7 @@ with open('mapping_collection_ids.json', 'w') as f:
 
 with open('collection_data_altered.json', 'w') as f:
     f.write(json.dumps(new_data, indent=4))
-
-
-
+    
 
 def process_json_file(input_path, output_path, mapping):
     """
