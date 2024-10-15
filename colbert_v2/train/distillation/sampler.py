@@ -1,8 +1,8 @@
-import json
 import logging
-from ..custom.data_organizer import CollectionData, GenQueryData
-from .el_search import EsSearcher
+
 import tqdm
+
+from .el_search import EsSearcher
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class HardNegativesSampler:
     def __init__(self, queries, collection, host):
-        self.host= host 
+        self.host= host
         self.collection = collection
         self.es = self.setup_es_index()
         self.index_name = 'documents'

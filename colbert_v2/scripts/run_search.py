@@ -1,6 +1,6 @@
 # scripts/run_search.py
-from models.searcher import ColBERTSearcher
 from config import Config
+from models.searcher import ColBERTSearcher
 
 if __name__ == "__main__":
     query = input("Enter search query: ")

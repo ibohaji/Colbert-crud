@@ -1,8 +1,12 @@
 # models/updater.py
-from colbert import IndexUpdater
 import argparse
-from ..config import Config
+
+from colbert import IndexUpdater
+
 from models.searcher import ColBERTSearcher
+
+from ..config import Config
+
 
 class ColBERTUpdater:
     def __init__(self, config, searcher):
@@ -36,5 +40,5 @@ if __name__ == "__main__":
         updater.add_documents(args.document)
 
     elif args.action == 'r':
-        updater.remove_documents(args.document) 
+        updater.remove_documents(args.document)
 

@@ -1,11 +1,8 @@
-from colbert.distillation.scorer import Scorer
 import argparse
-import os
-import json
-import logging
-from colbert_v2.custom.data_organizer import CollectionData, GenQueryData
-import ujson
 
+import ujson
+from colbert.distillation.scorer import Scorer
+from colbert_v2.custom.data_organizer import CollectionData, GenQueryData
 
 
 def save_triples(scored_triples, output_path):
@@ -27,7 +24,7 @@ def compute_scores(triples, queries_data, collection_data):
 
     qids = [triple[0] for triple in triples]
     pids = [triple[1] for triple in triples]
-    
+
     scores = scorer.launch(qids, pids)
     return scores
 

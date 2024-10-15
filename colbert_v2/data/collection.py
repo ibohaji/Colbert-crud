@@ -5,27 +5,27 @@ class FileProcessor:
 
     def load_collection(self):
         documents = []
-        with open(self.path, 'r') as f:
+        with open(self.path) as f:
             for line in f:
                 columns = line.strip().split('\t')
                 documents.append(columns)
         return documents
     @staticmethod
     def ensure_proper_header(input_file):
-        with open(input_file, 'r') as f_in:
+        with open(input_file) as f_in:
             lines = f_in.readlines()
 
         # Ensure the first line is exactly 'id\ttext' and the rest remains unchanged
-        if not lines[0].strip() == "id\ttext":
+        if lines[0].strip() != 'id\ttext':
             lines.insert(0, "id\ttext\n")
-        
+
         # Write the updated content back to the same file
         with open(input_file, 'w') as f_out:
             f_out.writelines(lines)
 
     @staticmethod
     def add_missing_headers(input_file):
-        with open(input_file, 'r') as f_in:
+        with open(input_file) as f_in:
             lines = f_in.readlines()
 
         with open(input_file, 'w') as f_out:

@@ -1,12 +1,10 @@
 #### Borrowedf from https://github.com/stanford-futuredata/ColBERT/blob/main/colbert/distillation/scorer.py
 import torch
 import tqdm
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from colbert.infra import Run
 from colbert.infra.launcher import Launcher
-from colbert.infra import Run, RunConfig
-from colbert.modeling.reranker.electra import ElectraReranker
 from colbert.utils.utils import flatten
-
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 DEFAULT_MODEL = 'cross-encoder/ms-marco-MiniLM-L-6-v2'
 

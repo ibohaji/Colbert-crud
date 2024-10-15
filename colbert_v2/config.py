@@ -1,13 +1,14 @@
 # config.py
 #from colbert.infra import ColBERTConfig
+import json
 from dataclasses import dataclass
-import json 
+
 
 @dataclass
 class Config:
-    CHECKPOINT = "colbert-ir/colbertv2.0"  
-    DOC_MAXLEN = 300  
-    NBITS = 2  
+    CHECKPOINT = "colbert-ir/colbertv2.0"
+    DOC_MAXLEN = 300
+    NBITS = 2
     KMEANS_NITERS = 8  # KMeans iterations for FAISS clustering
     NCELLS = 4000  # Number of cells for coarse search
     NDOCS = 1000  # Number of documents to retrieve
@@ -18,16 +19,16 @@ class Config:
 
 
 @dataclass
-class MetaData():
-    """ Class to store all the parameters of the experiments """
+class MetaData:
+    """Class to store all the parameters of the experiments"""
     NWAY: int
     BSIZE: int
-    NDCG: float 
-    SAMPLING_METHOD: str 
+    NDCG: float
+    SAMPLING_METHOD: str
     LR: float
     WARMUP: int
     BASE_MODEL: str
-    EPOCHS: int 
+    EPOCHS: int
     NUM_QUERIES: int
     NUM_COLLECTION: int
     GPU_TYPE: str
@@ -77,7 +78,7 @@ class MetaData(metaclass=Singleton):
             setattr(self, key, value)
 
     def save_results(self, file_path='/experiment_results/'):
-        """ Save the metadata to a JSON file """
+        """Save the metadata to a JSON file"""
         data = self.__dict__
         file_name = file_path + self.EXPERIMENT_ID +'_'+ 'metadata.json'
         with open(file_path, 'w') as f:

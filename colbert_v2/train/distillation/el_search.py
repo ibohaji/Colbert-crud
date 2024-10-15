@@ -1,5 +1,6 @@
-from elasticsearch import Elasticsearch, helpers
 import logging
+
+from elasticsearch import Elasticsearch, helpers
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +20,7 @@ class EsSearcher:
         except Exception as e:
             logger.error(f"Error connecting to Elasticsearch: {e}")
             raise e
-        
+
     def retrieve(self, index, query_text, positive_doc_id, num_results=10):
          search_body = {
             "size": num_results,
@@ -38,11 +39,11 @@ class EsSearcher:
                 }
             }
         }
-         
+
          response = self.es.search(index=self.index_name, body=search_body)
          return response['hits']['hits']
 
-         
+
 
 
     def index_documents(self, collection_data):
@@ -79,9 +80,9 @@ class EsSearcher:
 
         try:
             success, failed = helpers.bulk(
-                self.es, 
-                actions, 
-                refresh=True, 
+                self.es,
+                actions,
+                refresh=True,
                 raise_on_error=False,
                 stats_only=False
             )
@@ -93,8 +94,8 @@ class EsSearcher:
         except Exception as e:
             logger.error(f"Error during bulk indexing: {e}")
             raise e
-        
-    
+
+
 
 
 

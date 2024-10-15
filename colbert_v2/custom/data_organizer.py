@@ -1,7 +1,6 @@
 import json
 import logging
-import json
-import logging
+
 
 class GenQueryData:
     def __init__(self, generated_queries_path):
@@ -9,7 +8,7 @@ class GenQueryData:
         self.queries_dict = self.load_data()
 
     def load_data(self):
-        with open(self.genqueries, 'r') as f:
+        with open(self.genqueries) as f:
             queries = json.load(f)
 
         queries_dict = {}
@@ -21,16 +20,16 @@ class GenQueryData:
         return queries_dict
 
 
-class CollectionData: 
-    def __init__(self, collection_path): 
-        self.collection_path = collection_path 
+class CollectionData:
+    def __init__(self, collection_path):
+        self.collection_path = collection_path
         self.collection_dict = list(self.load_jsonl(collection_path))
         self.collection_pids = self.make_collection_pids()
         logging.info(f"Loaded {len(self.collection_dict)} documents from '{collection_path}'.")
 
     def load_jsonl(self, path):
         """Loads documents from a JSONL file."""
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding='utf-8') as f:
             for line in f:
                 try:
                     entry = json.loads(line)

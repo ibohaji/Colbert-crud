@@ -1,11 +1,11 @@
 # models/indexer.py
-from colbert import Indexer
-from colbert.infra import Run, RunConfig, ColBERTConfig
-from colbert.data import Queries, Collection
-from ..config import Config, MetaData
-import os 
-from ..data.collection import FileProcessor
 import argparse
+
+from colbert import Indexer
+from colbert.infra import ColBERTConfig, Run, RunConfig
+
+from ..config import Config, MetaData
+
 
 class ColBERTIndexer:
     def __init__(self, config, collection_path):

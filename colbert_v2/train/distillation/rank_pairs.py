@@ -1,14 +1,14 @@
-from colbert.infra import Run
-from colbert.infra.config import RunConfig
-from .scorer import Scorer
-from collections import defaultdict
-from ...custom.data_organizer import CollectionData, GenQueryData
 import argparse
-import json 
+import json
+from collections import defaultdict
+
 import tqdm
 import ujson
+from colbert.infra import Run
+from colbert.infra.config import RunConfig
 
-
+from ...custom.data_organizer import CollectionData, GenQueryData
+from .scorer import Scorer
 
 
 def main(qids, pids, collection, queries):
@@ -30,7 +30,7 @@ def main(qids, pids, collection, queries):
         print(f"Saved distillation scores to {output_path}")
 
 
-if __name__=="__main__": 
+if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--qid_path', type=str, required=True)
     parser.add_argument('--pid_path', type=str, required=True)
@@ -41,23 +41,23 @@ if __name__=="__main__":
 
     queries = GenQueryData(args.queries_path)
     collection = CollectionData(args.collection_path)
-    
+
     queries = queries.queries_dict
     queries = {qid: query['text'] for qid, query in queries.items()}
-    # save queries as a dictionary with qid as key and query text as value 
+    # save queries as a dictionary with qid as key and query text as value
     with open('queries_generated_mapping.json', 'w') as f:
         f.write(json.dumps(queries, indent=4))
 
     collection = collection.collection_dict
     collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
 
-    with open(args.qid_path, 'r') as f:
+    with open(args.qid_path) as f:
         qids = [line.strip().strip('"') for line in f.readlines()]
 
-    with open(args.pid_path, 'r') as f:
+    with open(args.pid_path) as f:
         pids = [line.strip().strip('"') for line in f.readlines()]
 
-    
+
     #main(qids, pids, collection, queries)
 
 

@@ -1,8 +1,8 @@
 # main.py
-from models.searcher import ColBERTSearcher
 from colbert_v2.models.indexer import ColBERTIndexer
-from models.updater import ColBERTUpdater
 from config import Config
+from models.searcher import ColBERTSearcher
+from models.updater import ColBERTUpdater
 
 if __name__ == "__main__":
     print("Welcome to ColBERT IR System")

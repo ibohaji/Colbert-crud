@@ -1,12 +1,13 @@
-from beir import util, LoggingHandler
+import argparse
+import csv
+import json
+import logging
+import random
+import sys
+
+from beir import LoggingHandler
 from beir.datasets.data_loader import GenericDataLoader
 from beir.retrieval.evaluation import EvaluateRetrieval
-import time 
-import pathlib, os, csv, random
-import sys
-import argparse
-import logging
-import json 
 
 #### Just some code to print debug information to stdout
 logging.basicConfig(format='%(asctime)s - %(message)s',
@@ -27,7 +28,7 @@ def map_back(collection, corpus):
     doc_id_keys = list(corpus.keys())  # Make sure corpus.keys() is iterable as a list
     for idx, (doc_id_key, row) in enumerate(zip(doc_id_keys, tsv_reader(collection))):
         mapping[str(idx)] = doc_id_key
-    
+
     return mapping
 
 
@@ -42,14 +43,13 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
             out_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "datasets")
             data_dir = util.download_and_unzip(url, out_dir)
     """
-    
     #### Provide the data_dir where scifact has been downloaded and unzipped
     corpus, queries, qrels = GenericDataLoader(data_folder=data_dir).load(split=split)
     true_map = map_back(collection, corpus)
     inv_map, results = {}, {}
       #### Document mappings (from original string to position in tsv file ####
     for idx, row in tsv_reader(collection):
-        inv_map[str(idx)] = row[1]  
+        inv_map[str(idx)] = row[1]
 
     #### Results ####
     for _, row in tsv_reader(rankings):
@@ -86,7 +86,7 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
 
     with open("colbert_metrics.json", "w") as f:
         json.dump(colbert_metrics, f, indent=2)
-        
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, help="BEIR Dataset Name, eg. nfcorpus")

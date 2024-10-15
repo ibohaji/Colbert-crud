@@ -1,11 +1,12 @@
-from colbert.data import Ranking
-from colbert_v2 import GenQueryData, CollectionData
-from ..sampler import HardNegativesSampler
-import json
-import ujson
-import logging
 import argparse
+import logging
+
 import tqdm
+import ujson
+from colbert_v2 import CollectionData, GenQueryData
+
+from ..sampler import HardNegativesSampler
+
 
 def save_pairs(scored_triples, output_path):
     with open(output_path, 'w') as f:
@@ -27,7 +28,7 @@ def generate_pairs(queries_data, hard_negatives):
     for query_id, query_data in tqdm.tqdm(queries_data.queries_dict.items()):
         positive_doc_id = query_data['doc_id']
         negatives = hard_negatives.get(query_id, [])
-        
+
         qids.append(query_id)
         pids.append(positive_doc_id)
 
@@ -54,9 +55,21 @@ def main(generated_queries_path, collection_path, host):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
-    parser.add_argument("--generated_queries_path", type=str, required=True, help="Path to the generated queries")
-    parser.add_argument("--collection_path", type=str, required=True, help="Path to the collection")
-    parser.add_argument("--host", type=str, default=None, help="Elasticsearch host")
+    parser.add_argument("--generated_queries_path",
+                         type=str, required=True, 
+                         help="Path to the generated queries"
+                         )
+    parser.add_argument("--collection_path",
+                          type=str, 
+                          required=True, 
+                          help="Path to the collection"
+                          )
+    parser.add_argument("--host", 
+                        type=str, 
+                        default=None, 
+                        help="Elasticsearch host"
+                        )
+    
     args = parser.parse_args()
     print('starting..')
     main(args.generated_queries_path, args.collection_path, args.host)
