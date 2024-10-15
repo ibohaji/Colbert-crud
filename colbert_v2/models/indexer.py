@@ -31,7 +31,7 @@ if __name__ == "__main__":
     parser.add_argument('--checkpoint', type=str, default=custom_config.CHECKPOINT)
 
     args = parser.parse_args()
-    MetaData.update(EXPERIMENT_ID=args.experiment)
+    MetaData().update(EXPERIMENT_ID=args.experiment)
     collection_path = args.collection
     indexer = ColBERTIndexer(custom_config, collection_path = collection_path)
     indexer.index_documents()
