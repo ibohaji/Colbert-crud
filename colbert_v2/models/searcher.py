@@ -14,7 +14,7 @@ from ..config import Config, MetaData
 class ColBERTSearcher:
     def __init__(self, index_name, queries_path):
         self.config = Config()
-        self.Config.INDEX_NAME = index_name 
+        self.config.INDEX_NAME = index_name 
         self.queries_path = queries_path
 
     def search(self, ranking_output):
