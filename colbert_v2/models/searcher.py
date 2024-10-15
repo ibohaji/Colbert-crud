@@ -28,7 +28,7 @@ class ColBERTSearcher:
             ranking.save('scifact.nbit=2.ranking.tsv')
 
         total_time = time() - start_time
-
+        print(f"Search completed successfully in {total_time} seconds")
         MetaData.update(Search_time=total_time)
 
         with open("search_time.json", "w") as f:
