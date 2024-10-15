@@ -39,7 +39,7 @@ class MetaData():
     SEED: int
 
 
-def Singleton(cls):
+def Singleton(type):
     _instances = {}
     def __new__(cls, *args, **kwargs):
         if cls not in cls._instances:
