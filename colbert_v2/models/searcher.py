@@ -44,9 +44,10 @@ if __name__ == "__main__":
     parser.add_argument('--Queries', type=str, default="crud.colbert.index")
     parser.add_argument('--output_path', type=str, help='Path to store rankings')
     parser.add_argument('--experiment', type=str, default="scifact")
+    parser.add_argument('--index_name', type=str, default="experiments")
     args = parser.parse_args()
     queries = args.Queries 
     output = args.output_path
     config = Config()
-    searcher = ColBERTSearcher(config.INDEX_NAME, queries)
+    searcher = ColBERTSearcher(args.index_name, queries)
     searcher.search(output)
