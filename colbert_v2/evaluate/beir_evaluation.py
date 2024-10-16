@@ -4,6 +4,9 @@ import json
 import logging
 import random
 import sys
+import os
+import pathlib
+from beir import util
 
 from beir import LoggingHandler
 from beir.datasets.data_loader import GenericDataLoader
@@ -35,14 +38,14 @@ def map_back(collection, corpus):
 
 def main(dataset, split, data_dir, collection, rankings, k_values):
     #### Provide the data_dir where the corpus has been downloaded and unzipped
-    """   
+      
     if data_dir == None:
             print("Downloading the dataset\n"*10)
             
             url = "https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{}.zip".format(dataset)
             out_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "datasets")
             data_dir = util.download_and_unzip(url, out_dir)
-    """
+    
     #### Provide the data_dir where scifact has been downloaded and unzipped
     corpus, queries, qrels = GenericDataLoader(data_folder=data_dir).load(split=split)
     true_map = map_back(collection, corpus)
@@ -97,4 +100,4 @@ if __name__ == '__main__':
     parser.add_argument('--rankings', required=True, type=str, help='Path to the ColBERT generated rankings file')
     parser.add_argument('--k_values', nargs='+', type=int, default=[1,3,5,10,100,1000])
     args = parser.parse_args()
-    main(**vars(args))
+    main(args.dataset, args.split, args.data_dir, args.collection, args.rankings, args.k_values)
