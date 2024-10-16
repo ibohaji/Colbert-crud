@@ -26,15 +26,14 @@ class ColBERTSearcher:
             queries = Queries(self.queries_path)
             ranking = searcher.search_all(queries, k=1000)
             os.makedirs(ranking_output, exist_ok=True)
-            out_file = os.path.join(ranking_output, "scifact_fine_tuned_ranking.tsv")
+            out_file = os.path.join(ranking_output, "scifact_fine_tuned_ranking_.tsv")
             ranking.save(out_file)
 
         total_time = time() - start_time
         print(f"Search completed successfully in {total_time} seconds")
         MetaData().update(Search_time=total_time)
 
-        with open("search_time.json", "w") as f:
-            json.dump({"search_time": total_time}, f, indent=2)
+        
 
 if __name__ == "__main__":
     ## parse args and call searcher
