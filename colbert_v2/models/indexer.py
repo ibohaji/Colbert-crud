@@ -1,6 +1,6 @@
 # models/indexer.py
 import argparse
-
+from custom.execution_monitor import ExecutionMonitor
 from colbert import Indexer
 from colbert.infra import ColBERTConfig, Run, RunConfig
 from time import time
@@ -14,7 +14,8 @@ class ColBERTIndexer:
         #  FileProcessor.ensure_proper_header(config.COLLECTION_PATH)
         #  self.queries = Queries(path=config.QUERIES_PATH)
         self.collection_path = collection_path
-
+   
+    @ExecutionMonitor
     def index_documents(self):
 
         with Run().context(RunConfig(nranks=1, experiment='experiments')):

@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 from time import time
-
+from custom.execution_monitor import ExecutionMonitor
 from colbert import Searcher
 from colbert.data import Queries
 from colbert.infra import ColBERTConfig, Run, RunConfig
@@ -15,7 +15,8 @@ class ColBERTSearcher:
     def __init__(self, index_name, queries_path):
         self.config = Config()
         self.queries_path = queries_path
-
+        
+    @ExecutionMonitor
     def search(self, ranking_output):
         start_time = time()
         with Run().context(RunConfig(nranks=1, experiment='experiments')):
