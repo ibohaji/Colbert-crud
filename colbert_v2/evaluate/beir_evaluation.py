@@ -8,7 +8,7 @@ import sys
 from beir import LoggingHandler
 from beir.datasets.data_loader import GenericDataLoader
 from beir.retrieval.evaluation import EvaluateRetrieval
-
+from ..config import MetaData
 #### Just some code to print debug information to stdout
 logging.basicConfig(format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -84,6 +84,7 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
         "Precision": precision,
     }
 
+    MetaData().update(colbert_metrics)
     with open("colbert_metrics.json", "w") as f:
         json.dump(colbert_metrics, f, indent=2)
 

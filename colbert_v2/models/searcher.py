@@ -29,7 +29,7 @@ class ColBERTSearcher:
 
         total_time = time() - start_time
         print(f"Search completed successfully in {total_time} seconds")
-        MetaData.update(Search_time=total_time)
+        MetaData().update(Search_time=total_time)
 
         with open("search_time.json", "w") as f:
             json.dump({"search_time": total_time}, f, indent=2)
@@ -42,6 +42,8 @@ if __name__ == "__main__":
     parser.add_argument('--experiment', type=str, default="scifact")
     parser.add_argument('--index_name', type=str, default="experiments")
     args = parser.parse_args()
+
+    
     queries = args.Queries
     output = args.output_path
     config = Config()
