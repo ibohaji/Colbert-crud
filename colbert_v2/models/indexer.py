@@ -1,6 +1,6 @@
 # models/indexer.py
 import argparse
-from custom.execution_monitor import ExecutionMonitor
+from ..custom.execution_monitor import ExecutionMonitor
 from colbert import Indexer
 from colbert.infra import ColBERTConfig, Run, RunConfig
 from time import time
