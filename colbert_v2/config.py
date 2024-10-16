@@ -2,6 +2,9 @@
 #from colbert.infra import ColBERTConfig
 import json
 from dataclasses import dataclass
+from datetime import datetime
+import hashlib
+import os 
 
 
 @dataclass
@@ -49,8 +52,9 @@ class Singleton(type):
 
 
 class MetaData(metaclass=Singleton):
+
     def __init__(self):
-        self.EXPERIMENT_ID = None
+        self.EXPERIMENT_ID = self.generate_unique_id()
         self.NWAY = None
         self.BSIZE = None
         self.NDCG = None
@@ -76,15 +80,26 @@ class MetaData(metaclass=Singleton):
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
+        self.save_results()
+        
+    def generate_unique_id(self):
+        """Generate a unique id based on current time and hash it"""
+        current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")
+        hash_object = hashlib.sha256(current_time.encode())
+        return hash_object.hexdigest()
 
-    def save_results(self, file_path='/experiment_results/'):
-        """Save the metadata to a JSON file"""
+    def save_results(self, base_path='/experiment_results/'):
+        """Append the metadata to a JSON file dynamically"""
         data = self.__dict__
-        file_name = file_path + self.EXPERIMENT_ID +'_'+ 'metadata.json'
-        with open(file_path, 'w') as f:
-            json.dump(data, f, indent=4)
+        run_path = os.path.join(base_path, self.EXPERIMENT_ID)
+        os.makedirs(run_path, exist_ok=True)
 
-        print(f"MetaData saved to {file_path}")
+        file_name = os.path.join(run_path, 'experiment_{self.EXPERIMENT_ID}_data.json')
+
+        with open(file_name / '.json', 'w') as f:
+            f.write(json.dumps(data, indent=4))
+
+        print(f"MetaData saved to {file_name}")
 
 
 

@@ -3,7 +3,7 @@ import argparse
 
 from colbert import Indexer
 from colbert.infra import ColBERTConfig, Run, RunConfig
-
+from time import time
 from ..config import Config, MetaData
 
 
@@ -16,11 +16,18 @@ class ColBERTIndexer:
         self.collection_path = collection_path
 
     def index_documents(self):
+
         with Run().context(RunConfig(nranks=1, experiment='experiments')):
+            start_time = time()
             config = ColBERTConfig(doc_maxlen=512, nbits=2)
             indexer = Indexer(checkpoint=self.config.CHECKPOINT, config=config)
             indexer.index(name=self.config.INDEX_NAME, collection=self.collection_path, overwrite=True)
+        total_time = time() - start_time
+
+
+        print(f"Indexing completed successfully in {total_time} seconds")
         print("Index created successfully!")
+        MetaData().update(Index_time=total_time)
 
 if __name__ == "__main__":
     custom_config = Config()
