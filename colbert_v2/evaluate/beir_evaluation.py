@@ -88,7 +88,6 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
     }
 
     MetaData().update(colbert_metrics)
-    MetaData().
     with open("colbert_metrics.json", "w") as f:
         json.dump(colbert_metrics, f, indent=2)
 
