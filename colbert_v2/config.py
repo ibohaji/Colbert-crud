@@ -95,10 +95,9 @@ class MetaData(metaclass=Singleton):
 
         run_path = os.path.join(base_path, self.EXPERIMENT_ID)
         os.makedirs(run_path, exist_ok=True)
-
         file_name = os.path.join(run_path, 'experiment_{self.EXPERIMENT_ID}_data.json')
 
-        with open(file_name / '.json', 'w') as f:
+        with open(file_name + '.json', 'w') as f:
             f.write(json.dumps(data, indent=4))
 
         print(f"MetaData saved to {file_name}")
