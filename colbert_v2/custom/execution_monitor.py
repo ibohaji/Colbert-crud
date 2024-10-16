@@ -23,9 +23,10 @@ def monitor_gpu(func):
 
         gpu_memory_after = print_gpu_utilisation()
         
-        
         MetaData().update(
-            function_name = gpu_memory_after
+            gpu_utilization = {
+                function_name: gpu_memory_after
+                }
         )
 
         print(f"GPU Memory Before: {gpu_memory_before}")

@@ -26,7 +26,8 @@ class ColBERTSearcher:
             queries = Queries(self.queries_path)
             ranking = searcher.search_all(queries, k=1000)
             output_path = os.makedirs(ranking_output, exist_ok=True)
-            ranking.save('scifact.nbit=2.ranking.tsv')
+            out_file = os.path.join(output_path, "scifact.nbit=2.ranking.tsv")
+            ranking.save(out_file)
 
         total_time = time() - start_time
         print(f"Search completed successfully in {total_time} seconds")
