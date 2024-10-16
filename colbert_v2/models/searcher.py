@@ -16,7 +16,7 @@ class ColBERTSearcher:
         self.config = Config()
         self.queries_path = queries_path
 
-    @ExecutionMonitor
+    @monitor_gpu
     def search(self, ranking_output):
         start_time = time()
         with Run().context(RunConfig(nranks=1, experiment='experiments')):

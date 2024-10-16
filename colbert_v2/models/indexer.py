@@ -15,7 +15,7 @@ class ColBERTIndexer:
         #  self.queries = Queries(path=config.QUERIES_PATH)
         self.collection_path = collection_path
    
-    @ExecutionMonitor
+    @monitor_gpu
     def index_documents(self):
 
         with Run().context(RunConfig(nranks=1, experiment='experiments')):
