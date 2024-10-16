@@ -88,9 +88,11 @@ class MetaData(metaclass=Singleton):
         hash_object = hashlib.sha256(current_time.encode())
         return hash_object.hexdigest()
 
-    def save_results(self, base_path='/experiment_results/'):
+    def save_results(self):
         """Append the metadata to a JSON file dynamically"""
         data = self.__dict__
+        base_path = os.path.join(os.getcwd(), 'experiment_results')
+
         run_path = os.path.join(base_path, self.EXPERIMENT_ID)
         os.makedirs(run_path, exist_ok=True)
 
