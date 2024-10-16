@@ -22,11 +22,11 @@ class ColBERTSearcher:
         with Run().context(RunConfig(nranks=1, experiment='experiments')):
             start_time = time()
             config = ColBERTConfig(root="experiments")
-            searcher = Searcher(index=self.config.INDEX_NAME, config=config)
+            searcher = Searcher(index=self.config.INDEX_NAME, config=config, checkpoint = self.config.CHECKPOINT)
             queries = Queries(self.queries_path)
             ranking = searcher.search_all(queries, k=1000)
             os.makedirs(ranking_output, exist_ok=True)
-            out_file = os.path.join(ranking_output, "scifact.nbit=2.ranking")
+            out_file = os.path.join(ranking_output, "scifact_fine_tuned_ranking.tsv")
             ranking.save(out_file)
 
         total_time = time() - start_time

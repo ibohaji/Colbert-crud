@@ -1,10 +1,7 @@
 # models/updater.py
 import argparse
-
 from colbert import IndexUpdater
-
 from models.searcher import ColBERTSearcher
-
 from ..config import Config
 
 

@@ -44,11 +44,14 @@ def print_gpu_utilisation():
         devices = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")
         nvml_gpu_id = int(devices[torch_gpu_id]) 
         handle = pynvml.nvmlDeviceGetHandleByIndex(nvml_gpu_id)
+        gpu_name = pynvml.nvmlDeviceGetName(handle).decode("utf-8")
+
         info = pynvml.nvmlDeviceGetMemoryInfo(handle)
         info_used = info.used // 1024 ** 2  # Convert to MB
         info_total = info.total // 1024 ** 2  # Convert to MB
 
         gpu_memory_info = {
+            "name": gpu_name,
             "used": info_used,
             "total": info_total,
             "percentage": np.round((info_used * 100) / info_total, 2)

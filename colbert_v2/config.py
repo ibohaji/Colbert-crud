@@ -9,7 +9,7 @@ import os
 
 @dataclass
 class Config:
-    CHECKPOINT = "colbert-ir/colbertv2.0"
+    CHECKPOINT = "experiments/default/none/2024-10/13/02.16.29/checkpoints/colbert"
     DOC_MAXLEN = 300
     NBITS = 2
     KMEANS_NITERS = 8  # KMeans iterations for FAISS clustering
