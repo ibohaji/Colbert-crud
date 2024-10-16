@@ -10,9 +10,6 @@ from ..config import Config, MetaData
 class ColBERTIndexer:
     def __init__(self, config, collection_path):
         self.config = config
-        #  FileProcessor.add_missing_headers(config.COLLECTION_PATH)
-        #  FileProcessor.ensure_proper_header(config.COLLECTION_PATH)
-        #  self.queries = Queries(path=config.QUERIES_PATH)
         self.collection_path = collection_path
    
     @monitor_gpu
@@ -20,7 +17,7 @@ class ColBERTIndexer:
 
         with Run().context(RunConfig(nranks=1, experiment='experiments')):
             start_time = time()
-            config = ColBERTConfig(doc_maxlen=512, nbits=2)
+            config = ColBERTConfig(doc_maxlen=512, nbits=2, root='experiments')
             indexer = Indexer(checkpoint=self.config.CHECKPOINT, config=config)
             indexer.index(name=self.config.INDEX_NAME, collection=self.collection_path, overwrite=True)
         total_time = time() - start_time
