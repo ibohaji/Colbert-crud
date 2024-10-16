@@ -8,28 +8,26 @@ from ..config import MetaData
 
 class ExecutionMonitor:
     def __init__(self, func):
-        self.func = func  # Store the function to be decorated
-        self.meta_data = MetaData()  # Initialize MetaData
+        self.func = func
+        self.meta_data = MetaData()  
 
     def __call__(self, *args, **kwargs):
         """Monitor GPU and execute the function"""
         # Get calling function and module info
         caller = inspect.getframeinfo(inspect.currentframe().f_back)
-        module_name = os.path.basename(caller.filename)  # Get script name
-        function_name = self.func.__name__  # Get function name
+        module_name = os.path.basename(caller.filename)  
+        function_name = self.func.__name__
 
-        gpu_memory_before = self.print_gpu_utilisation()
-
-        start_time = time.time()
-        result = self.func(*args, **kwargs)  # Execute the function
-        end_time = time.time()
+        if len(args) > 0 and isinstance(args[0], object):
+            instance = args[0]
+            result = self.func(instance, *args[1:], **kwargs) 
+        else:
+            result = self.func(*args, **kwargs)
 
         gpu_memory_after = self.print_gpu_utilisation()
 
         title = f"{module_name}::{function_name}_gpu_utilisation"
-        self.meta_data.update(title = gpu_memory_after,
-                              
-        )
+        self.meta_data.update(title=gpu_memory_after)
 
         return result
 
@@ -59,4 +57,3 @@ class ExecutionMonitor:
         else:
             print("CUDA_VISIBLE_DEVICES not set. Skipping GPU memory measurement.")
             return {"used": 0, "total": 0, "percentage": 0}
-
