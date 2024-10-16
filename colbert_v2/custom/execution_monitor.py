@@ -27,7 +27,7 @@ def monitor_gpu(func):
         MetaData().update(
             function_name = gpu_memory_after
         )
-        
+
         print(f"GPU Memory Before: {gpu_memory_before}")
         print(f"GPU Memory After: {gpu_memory_after}")
         print(f"Execution Time: {end_time - start_time} seconds")
@@ -61,13 +61,3 @@ def print_gpu_utilisation():
         print("CUDA_VISIBLE_DEVICES not set. Skipping GPU memory measurement.")
         return {"used": 0, "total": 0, "percentage": 0}
 
-# Sample class using the decorator
-class ColBERTIndexer:
-    @monitor_gpu
-    def index_documents(self):
-        # Your indexing logic here
-        print("Indexing documents...")
-
-# Test it
-indexer = ColBERTIndexer()
-indexer.index_documents()
