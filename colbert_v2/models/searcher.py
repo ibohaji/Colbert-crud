@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 from time import time
-from ..custom.execution_monitor import ExecutionMonitor
+from ..custom.execution_monitor import monitor_gpu
 from colbert import Searcher
 from colbert.data import Queries
 from colbert.infra import ColBERTConfig, Run, RunConfig
