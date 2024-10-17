@@ -88,7 +88,7 @@ def main(dataset, split, data_dir, collection, rankings, k_values):
     }
 
     MetaData().update(colbert_metrics = colbert_metrics)
-    
+
     with open("colbert_metrics.json", "w") as f:
         json.dump(colbert_metrics, f, indent=2)
 
@@ -100,5 +100,6 @@ if __name__ == '__main__':
     parser.add_argument('--collection', type=str, help='Path to the ColBERT collection file')
     parser.add_argument('--rankings', required=True, type=str, help='Path to the ColBERT generated rankings file')
     parser.add_argument('--k_values', nargs='+', type=int, default=[1,3,5,10,100,1000])
+    
     args = parser.parse_args()
     main(args.dataset, args.split, args.data_dir, args.collection, args.rankings, args.k_values)
