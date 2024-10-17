@@ -74,6 +74,7 @@ class MetaData(metaclass=Singleton):
         self.DISTILLATION_TIME = None
         self.EVALUATION_TIME =None
         self.SEED = None
+        self.GPU_TYPE = None
 
 
 
