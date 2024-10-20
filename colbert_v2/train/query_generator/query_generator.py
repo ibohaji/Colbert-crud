@@ -28,10 +28,10 @@ class QueryGenerator:
             for line in f:
                 doc = json.loads(line)
                 data.append(doc)
+        data = self.index_document(data)
         return data
     
     def load_json(self, input_file:str)->Dict:
-        data = []
 
         with open(input_file) as f:
             json_data = json.load(f)
@@ -39,10 +39,6 @@ class QueryGenerator:
         for doc in json_data:
             data.append(doc)
         return data
-    
-
-
-
 
     def _load_documents(self, input_documents:str)->Dict:
 
@@ -58,8 +54,11 @@ class QueryGenerator:
         return data
 
     def index_document(self, documents:Dict)->Dict:
-        if  isinstance(documents, str):
+        if isinstance(documents, str):
             documents = self._load_documents(documents)
+        else:
+            documents = self._load_documents(documents)
+            
         return { idx: doc['text'] for idx, doc in enumerate(documents) }
 
     def generate_query_ids(self, _range):
