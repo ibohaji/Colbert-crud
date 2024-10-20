@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import hashlib
 import os 
+import random
 
 
 @dataclass
@@ -84,10 +85,10 @@ class MetaData(metaclass=Singleton):
         self.save_results()
         
     def generate_unique_id(self):
-        """Generate a unique id based on current time and hash it"""
-        current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")
-        hash_object = hashlib.sha256(current_time.encode())
-        return hash_object.hexdigest()
+        """Generate a unique id based on current time and a random number"""
+        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+        random_number = random.randint(1000, 9999)
+        return f"{current_time}_{random_number}"
 
     def save_results(self):
         """Append the metadata to a JSON file dynamically"""
@@ -96,7 +97,7 @@ class MetaData(metaclass=Singleton):
 
         run_path = os.path.join(base_path, self.EXPERIMENT_ID)
         os.makedirs(run_path, exist_ok=True)
-        file_name = os.path.join(run_path, 'experiment_{self.EXPERIMENT_ID}_data.json')
+        file_name = os.path.join(run_path, f'experiment_{self.EXPERIMENT_ID}_data.json')
 
         with open(file_name + '.json', 'w') as f:
             f.write(json.dumps(data, indent=4))

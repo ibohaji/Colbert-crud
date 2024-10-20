@@ -4,7 +4,6 @@ import os
 from collections import defaultdict
 from itertools import count
 from typing import Dict
-
 import torch
 from tqdm import tqdm
 from transformers import T5ForConditionalGeneration, T5Tokenizer
@@ -33,7 +32,7 @@ class QueryGenerator:
     
     def load_json(self, input_file:str)->Dict:
         data = []
-        
+
         with open(input_file) as f:
             json_data = json.load(f)
 
