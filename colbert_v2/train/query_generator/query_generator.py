@@ -75,7 +75,7 @@ class QueryGenerator:
     def generate_queries(self,batch_size:int = 16)->None:
         generated_queries = {}
         qrel = defaultdict(list)
-        doc_items = [(doc_id, doc_text) for doc_id, doc_te in self.documents.items()]
+        doc_items = [(doc_id, doc) for doc_id, doc in self.documents.items()]
 
         if self.output_path:
             os.makedirs(self.output_path, exist_ok=True)
