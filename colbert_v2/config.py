@@ -21,7 +21,6 @@ class Config:
     QUERIES_PATH = "colbert_v2/data/queries.tsv"
 
 
-
 @dataclass
 class MetaData:
     """Class to store all the parameters of the experiments"""

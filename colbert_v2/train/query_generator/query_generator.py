@@ -17,7 +17,7 @@ class QueryGenerator:
         self.output_path = output_path
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(self.device)
-        self.input_documents =  self.index_document(input_documents) if reindex else self._load_documents(input_documents)
+        self.document =  self.index_document(input_documents) if reindex else self._load_documents(input_documents)
         self.counter = count()
     
 

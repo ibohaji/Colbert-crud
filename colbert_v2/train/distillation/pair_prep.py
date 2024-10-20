@@ -53,10 +53,12 @@ def main(generated_queries_path, collection_path, host, num_negatives=3):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
+    
     parser.add_argument("--generated_queries_path",
                          type=str, required=True, 
                          help="Path to the generated queries"
                          )
+    
     parser.add_argument("--collection_path",
                           type=str, 
                           required=True, 
@@ -72,4 +74,5 @@ if __name__ == "__main__":
     parser.add_argument("--num_negatives", default=64, type=int, help="Number of negative samples to retrieve from Elasticsearch")
     args = parser.parse_args()
     print('starting..')
-    main(args.generated_queries_path, args.collection_path, args.host)
+
+    main(args.generated_queries_path, args.collection_path, args.host, args.num_negatives)
