@@ -11,13 +11,13 @@ from ...config import MetaData
 
 
 class QueryGenerator:
-    def __init__(self, model_name:str, input_documents, output_path = None, reindex = False)->None:
+    def __init__(self, model_name:str, input_documents, output_path = None)->None:
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.output_path = output_path
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(self.device)
-        self.documents =  self.index_document(input_documents) if reindex else self._load_documents(input_documents)
+        self.documents =  self.index_document(input_documents) 
         self.counter = count()
     
 
@@ -32,10 +32,16 @@ class QueryGenerator:
         return data
     
     def load_json(self, input_file:str)->Dict:
-
+        # load it as a list 
+        data = []
         with open(input_file) as f:
-            data = json.load(f)
+            json_data = json.load(f)
+        
+        for key, doc in json_data.items():
+            doc['id'] = key
+            data.append(doc)
         return data
+    
 
     def _load_documents(self, input_documents:str)->Dict:
 
@@ -45,18 +51,20 @@ class QueryGenerator:
         elif input_documents.endswith('.json'):
             data = self.load_json(input_documents)
 
+        elif input_documents.endswith('.tsv'):
+            raise NotImplementedError("Tsv file not supported yet")
+        
         else:
             raise ValueError("Input file must be a .json or .jsonl file")
         
         return data
 
     def index_document(self, documents:Dict)->Dict:
+
         if isinstance(documents, str):
             documents = self._load_documents(documents)
-        else:
-            documents = self._load_documents(documents)
-
-        return { idx: doc['text'] for idx, doc in enumerate(documents) }
+        
+        return { idx: doc['title'] + doc['text'] for idx, doc in enumerate(documents) }
 
     def generate_query_ids(self, _range):
         return [next(self.counter) for _ in range(_range)]
@@ -67,7 +75,7 @@ class QueryGenerator:
     def generate_queries(self,batch_size:int = 16)->None:
         generated_queries = {}
         qrel = defaultdict(list)
-        doc_items = [(doc_id, doc_text) for doc_id,doc_text in self.documents.values()]
+        doc_items = [(doc_id, doc_text) for doc_id, doc_te in self.documents.items()]
 
         if self.output_path:
             os.makedirs(self.output_path, exist_ok=True)
