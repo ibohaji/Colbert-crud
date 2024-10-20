@@ -180,7 +180,6 @@ if __name__ =="__main__":
 
     args = parser.parse_args()
     Qgen = QueryGenerator(args.model_name, args.input_documents)
-    data = []
 
     MetaData().update(top_p = args.top_p, num_genq = args.num_genq)
-    Qgen.generate_queries(data)
+    Qgen.generate_queries()
