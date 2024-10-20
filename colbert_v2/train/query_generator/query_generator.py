@@ -87,6 +87,10 @@ class QueryGenerator:
                 batch_docs = doc_items[start_idx:start_idx+batch_size]
 
                 for doc_id, doc in batch_docs:
+                    print('doc before  cleeaning:',doc)
+                    print('doc id:',doc_id)
+                    doc = self._clean_text(doc)
+                    print('doc after cleaning:',doc)
                     print('\nThe batch docs are\n,',batch_docs)
                     print('Doc ids are \n',doc_id)
                     print('Docs are \n',doc)
@@ -108,11 +112,12 @@ class QueryGenerator:
                 queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
                 queries = self.remove_duplicates(queries)
                 queries_id = self.generate_query_ids(len(queries))
+                
                 for _qid, query_text in zip(queries_id, queries):
-
                     generated_queries[_qid] = query_text
                     qrel[_qid] = doc_id
-                doc_text_clean = self._clean_text(doc)
+
+                
 
 
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
@@ -123,14 +128,7 @@ class QueryGenerator:
 
     def generate_split_queries(self, generated_queries, split_size=2):
         # Hold some of the generated queries for test, remove them from train. keep the indices and id as they were.
-        test_queries = {}
-        for i in range(0, len(generated_queries), split_size):
-            for j in range(i, i+split_size):
-                test_queries[j] = generated_queries.pop(j)
-
-        self.save_queries_to_json(generated_queries, os.path.join(self.output_path, 'train_queries.json'))
-        self.save_queries_to_json(test_queries, os.path.join(self.output_path, 'test_queries.json'))
-
+                
     def remove_duplicates(self, generated_queries:list):
         return list(set([query.lower() for query in generated_queries]))
 
