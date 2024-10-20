@@ -24,6 +24,7 @@ class QueryGenerator:
 
 
     def load_jsonl(self, input_file:str)->Dict:
+        data = []
         with open(args.input_documents) as f:
             for line in f:
                 doc = json.loads(line)
@@ -31,9 +32,18 @@ class QueryGenerator:
         return data
     
     def load_json(self, input_file:str)->Dict:
-        with open(args.input_documents) as f:
-            data = json.load(f)
+        data = []
+        
+        with open(input_file) as f:
+            json_data = json.load(f)
+
+        for doc in json_data:
+            data.append(doc)
         return data
+    
+
+
+
 
     def _load_documents(self, input_documents:str)->Dict:
 
