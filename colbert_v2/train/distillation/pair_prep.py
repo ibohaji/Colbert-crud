@@ -1,6 +1,5 @@
 import argparse
 import logging
-
 import tqdm
 import ujson
 from colbert_v2 import CollectionData, GenQueryData
@@ -70,6 +69,7 @@ if __name__ == "__main__":
                         help="Elasticsearch host"
                         )
     
+    parser.add_argument("--num_negatives", default=64, type=int, help="Number of negative samples to retrieve from Elasticsearch")
     args = parser.parse_args()
     print('starting..')
     main(args.generated_queries_path, args.collection_path, args.host)

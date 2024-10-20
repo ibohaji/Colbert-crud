@@ -157,8 +157,7 @@ if __name__ =="__main__":
                          )
     parser.add_argument("--top_p",
                         type=int,
-                        default=0.95,
-                        help="Batch size for generating queries"
+                        default=0.95
                         )
     parser.add_argument("--num_genq",
                         type=int,
