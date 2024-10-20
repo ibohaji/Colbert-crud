@@ -49,7 +49,7 @@ class QueryGenerator:
         return data
 
     def index_document(self, documents:Dict)->Dict:
-        if documents.isinstance(str):
+        if  isinstance(documents, str):
             documents = self._load_documents(documents)
         return { idx: doc['text'] for idx, doc in enumerate(documents) }
 
