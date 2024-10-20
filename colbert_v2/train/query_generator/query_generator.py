@@ -8,26 +8,44 @@ from typing import Dict
 import torch
 from tqdm import tqdm
 from transformers import T5ForConditionalGeneration, T5Tokenizer
-
 from ...config import MetaData
 
 
 class QueryGenerator:
-    def __init__(self, model_name:str, input_documents, output_path = None)->None:
+    def __init__(self, model_name:str, input_documents, output_path = None, reindex = False)->None:
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.output_path = output_path
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(self.device)
-        self.input_documents = self.index_document(input_documents)
+        self.input_documents =  self.index_document(input_documents) if reindex else self._load_documents(input_documents)
         self.counter = count()
+    
 
+
+    def load_jsonl(self, input_file:str)->Dict:
+        with open(args.input_documents) as f:
+            for line in f:
+                doc = json.loads(line)
+                data.append(doc)
+        return data
+    
+    def load_json(self, input_file:str)->Dict:
+        with open(args.input_documents) as f:
+            data = json.load(f)
+        return data
 
     def _load_documents(self, input_documents:str)->Dict:
-        with open(args.input_documents) as f:
-                for line in f:
-                    doc = json.loads(line)
-                    data.append(doc)
+
+        if input_documents.endswith('.jsonl'):
+            data = self.load_jsonl(input_documents)
+
+        elif input_documents.endswith('.json'):
+            data = self.load_json(input_documents)
+
+        else:
+            raise ValueError("Input file must be a .json or .jsonl file")
+        
         return data
 
     def index_document(self, documents:Dict)->Dict:
@@ -86,8 +104,19 @@ class QueryGenerator:
 
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
         self.save_queries_to_json(qrel, f"{self.output_path}/qrel.json")
-
+        self.generate_split_queries(generated_queries)
         return generated_queries
+
+
+    def generate_split_queries(self, generated_queries, split_size=2):
+        # Hold some of the generated queries for test, remove them from train. keep the indices and id as they were.
+        test_queries = {}
+        for i in range(0, len(generated_queries), split_size):
+            for j in range(i, i+split_size):
+                test_queries[j] = generated_queries.pop(j)
+
+        self.save_queries_to_json(generated_queries, os.path.join(self.output_path, 'train_queries.json'))
+        self.save_queries_to_json(test_queries, os.path.join(self.output_path, 'test_queries.json'))
 
     def remove_duplicates(self, generated_queries:list):
         return list(set([query.lower() for query in generated_queries]))
@@ -107,9 +136,7 @@ class QueryGenerator:
         """Utility function to clean text by removing tabs and non-ASCII characters."""
         return text.replace("\t", " ").encode("ascii", "ignore").decode().strip()
 
-
-
-
+        
 if __name__ =="__main__":
 
     parser = argparse.ArgumentParser()

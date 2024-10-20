@@ -4,8 +4,7 @@ import logging
 import tqdm
 import ujson
 from colbert_v2 import CollectionData, GenQueryData
-
-from ..sampler import HardNegativesSampler
+from .sampler import HardNegativesSampler
 
 
 def save_pairs(scored_triples, output_path):
@@ -39,12 +38,12 @@ def generate_pairs(queries_data, hard_negatives):
     return qids, pids
 
 
-def main(generated_queries_path, collection_path, host):
+def main(generated_queries_path, collection_path, host, num_negatives=3):
     print('starting...')
     queries_data = GenQueryData(generated_queries_path)
     collection_data = CollectionData(collection_path)
 
-    hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, host=host).get_hard_negatives_all(num_negatives=3)
+    hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, host=host).get_hard_negatives_all(num_negatives=num_negatives)
     qids, pids = generate_pairs(queries_data, hard_negatives)
 
     save_pairs(qids, 'qids.json')
@@ -64,6 +63,7 @@ if __name__ == "__main__":
                           required=True, 
                           help="Path to the collection"
                           )
+    
     parser.add_argument("--host", 
                         type=str, 
                         default=None, 
