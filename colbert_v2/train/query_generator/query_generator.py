@@ -122,63 +122,63 @@ class QueryGenerator:
         return text.replace("\t", " ").encode("ascii", "ignore").decode().strip()
 
 
-        def generate_queries(self,batch_size:int = 16)->None:
-            generated_queries = {}
-            qrel = defaultdict(list)
-            doc_items = [(doc_id, doc) for doc_id, doc in self.documents.items()]
+    def generate_queries(self,batch_size:int = 16)->None:
+        generated_queries = {}
+        qrel = defaultdict(list)
+        doc_items = [(doc_id, doc) for doc_id, doc in self.documents.items()]
 
-            if self.output_path:
-                os.makedirs(self.output_path, exist_ok=True)
-            else:
-                self.output_path = "generated_query_data"
-                os.makedirs(self.output_path, exist_ok=True)
+        if self.output_path:
+            os.makedirs(self.output_path, exist_ok=True)
+        else:
+            self.output_path = "generated_query_data"
+            os.makedirs(self.output_path, exist_ok=True)
 
-                for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
-                    batch_docs = doc_items[start_idx:start_idx+batch_size]
+            for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
+                batch_docs = doc_items[start_idx:start_idx+batch_size]
 
-                    for doc_id, doc in batch_docs:
-                        print('doc before  cleeaning:',doc)
-                        print('doc id:',doc_id)
-                        doc = self._clean_text(doc)
-                        with open('cleaned_docs.txt','w') as f:
-                            f.write(doc)
-                            
-                        return doc
-                        print('doc after cleaning:',doc)
-                        print('\nThe batch docs are\n,',batch_docs)
-                        print('Doc ids are \n',doc_id)
-                        print('Docs are \n',doc)
-                        break
-                        input_ids = self.tokenizer.encode(
-                            doc,
-                            max_length=512,
-                            truncation=True,
-                            return_tensors='pt'
-                            ).to(self.device)
+                for doc_id, doc in batch_docs:
+                    print('doc before  cleeaning:',doc)
+                    print('doc id:',doc_id)
+                    doc = self._clean_text(doc)
+                    with open('cleaned_docs.txt','w') as f:
+                        f.write(doc)
+                        
+                    return doc
+                    print('doc after cleaning:',doc)
+                    print('\nThe batch docs are\n,',batch_docs)
+                    print('Doc ids are \n',doc_id)
+                    print('Docs are \n',doc)
+                    break
+                    input_ids = self.tokenizer.encode(
+                        doc,
+                        max_length=512,
+                        truncation=True,
+                        return_tensors='pt'
+                        ).to(self.device)
 
-                        outputs = self.model.generate(
-                            input_ids=input_ids,
-                            max_length=64,
-                            do_sample=True,
-                            top_p=0.95,
-                            num_return_sequences=5
-                        )
+                    outputs = self.model.generate(
+                        input_ids=input_ids,
+                        max_length=64,
+                        do_sample=True,
+                        top_p=0.95,
+                        num_return_sequences=5
+                    )
 
-                    queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
-                    queries = self.remove_duplicates(queries)
-                    queries_id = self.generate_query_ids(len(queries))
-                    
-                    for _qid, query_text in zip(queries_id, queries):
-                        generated_queries[_qid] = query_text
-                        qrel[_qid] = doc_id
+                queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
+                queries = self.remove_duplicates(queries)
+                queries_id = self.generate_query_ids(len(queries))
+                
+                for _qid, query_text in zip(queries_id, queries):
+                    generated_queries[_qid] = query_text
+                    qrel[_qid] = doc_id
 
-                    
+                
 
 
-            self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
-            self.save_queries_to_json(qrel, f"{self.output_path}/qrel.json")
-            self.generate_split_queries(generated_queries)
-            return generated_queries
+        self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
+        self.save_queries_to_json(qrel, f"{self.output_path}/qrel.json")
+        self.generate_split_queries(generated_queries)
+        return generated_queries
 
 
         
