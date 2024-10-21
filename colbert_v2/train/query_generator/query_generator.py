@@ -24,8 +24,8 @@ class QueryGenerator:
 
     def create_directory(self, output_path:str)->str:
         if output_path is None:
-            output = os.path.join(os.getcwd(), "generated_queries")
-        os.makedirs(output, exist_ok=True)
+            output_path = os.path.join(os.getcwd(), "generated_queries")
+        os.makedirs(output_path, exist_ok=True)
         return output_path
     
     def load_jsonl(self, input_file:str)->Dict:
@@ -135,7 +135,7 @@ class QueryGenerator:
 
         for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
             batch_docs = doc_items[start_idx:start_idx+batch_size]
-            
+
             for doc_id, doc in batch_docs:
                     doc = self._clean_text(doc)
                     input_ids = self.tokenizer.encode(
