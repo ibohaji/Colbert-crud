@@ -205,7 +205,7 @@ if __name__ =="__main__":
                         )
 
     args = parser.parse_args()
-    Qgen = QueryGenerator(args.model_name, args.input_documents, args.output_path)
+    Qgen = QueryGenerator(args.model_name, args.input_documents, args.output_file)
 
     MetaData().update(top_p = args.top_p, num_genq = args.num_genq)
     Qgen.generate_queries()
