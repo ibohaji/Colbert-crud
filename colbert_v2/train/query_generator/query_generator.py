@@ -14,7 +14,7 @@ class QueryGenerator:
     def __init__(self, model_name:str, input_documents, output_path = None)->None:
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.output_path = output_path
+        self.output_path = self.create_directory(output_path)
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(self.device)
         self.documents =  self.index_document(input_documents) 
@@ -22,6 +22,12 @@ class QueryGenerator:
     
 
 
+    def create_directory(self, output_path:str)->str:
+        if output_path is None:
+            output = os.path.join(os.getcwd(), "generated_queries")
+        os.makedirs(output, exist_ok=True)
+        return output_path
+    
     def load_jsonl(self, input_file:str)->Dict:
         data = []
         with open(args.input_documents) as f:
@@ -126,12 +132,6 @@ class QueryGenerator:
         generated_queries = {}
         qrel = defaultdict(list)
         doc_items = [(doc_id, doc) for doc_id, doc in self.documents.items()]
-
-        if self.output_path:
-            os.makedirs(self.output_path, exist_ok=True)
-        else:
-            self.output_path = "generated_query_data"
-            os.makedirs(self.output_path, exist_ok=True)
 
         for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
             batch_docs = doc_items[start_idx:start_idx+batch_size]
