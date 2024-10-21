@@ -94,6 +94,7 @@ class QueryGenerator:
                     print('\nThe batch docs are\n,',batch_docs)
                     print('Doc ids are \n',doc_id)
                     print('Docs are \n',doc)
+                    break
                     input_ids = self.tokenizer.encode(
                         doc,
                         max_length=512,
@@ -126,9 +127,36 @@ class QueryGenerator:
         return generated_queries
 
 
-    def generate_split_queries(self, generated_queries, split_size=2):
-        # Hold some of the generated queries for test, remove them from train. keep the indices and id as they were.
-                
+def generate_split_queries(self, generated_queries: Dict[int, str], qrel: Dict[int, int], hold_out_size: int = 2):
+    
+    train_queries = {}
+    validation_queries = {}
+
+    queries_by_doc = defaultdict(list)
+    for query_id, doc_id in qrel.items():
+        queries_by_doc[doc_id].append(query_id)
+    
+    for doc_id, query_ids in queries_by_doc.items():
+        if len(query_ids) <= hold_out_size + 1:
+            validation_queries.update({qid: generated_queries[qid] for qid in query_ids})
+        else:
+            validation_queries.update({qid: generated_queries[qid] for qid in query_ids[:hold_out_size]})
+            train_queries.update({qid: generated_queries[qid] for qid in query_ids[hold_out_size:]})
+    
+    validation_output_file = os.path.join(self.output_path, "validation_queries.tsv")
+    train_output_file = os.path.join(self.output_path, "train_queries.tsv")
+    
+    self.save_queries_to_tsv(validation_queries, validation_output_file)
+    self.save_queries_to_tsv(train_queries, train_output_file)
+
+    print(f"TSV files saved: {len(train_queries)} training queries and {len(validation_queries)} validation queries.")
+    
+def save_queries_to_tsv(self, queries: Dict[int, str], output_file: str):
+ 
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for qid, qtext in queries.items():
+            f.write(f"{qid}\t{qtext}\n")
+        
     def remove_duplicates(self, generated_queries:list):
         return list(set([query.lower() for query in generated_queries]))
 
