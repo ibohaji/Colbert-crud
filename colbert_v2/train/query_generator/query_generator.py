@@ -177,7 +177,7 @@ class QueryGenerator:
 
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
         self.save_queries_to_json(qrel, f"{self.output_path}/qrel.json")
-        self.generate_split_queries(generated_queries)
+        self.generate_split_queries(generated_queries, qrel)
         return generated_queries
 
 
