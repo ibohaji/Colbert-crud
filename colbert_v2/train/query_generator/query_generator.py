@@ -133,10 +133,10 @@ class QueryGenerator:
             self.output_path = "generated_query_data"
             os.makedirs(self.output_path, exist_ok=True)
 
-            for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
-                batch_docs = doc_items[start_idx:start_idx+batch_size]
+        for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
+            batch_docs = doc_items[start_idx:start_idx+batch_size]
 
-                for doc_id, doc in batch_docs:
+            for doc_id, doc in batch_docs:
                     print('doc before  cleeaning:',doc)
                     print('doc id:',doc_id)
                     doc = self._clean_text(doc)
@@ -164,16 +164,13 @@ class QueryGenerator:
                         num_return_sequences=5
                     )
 
-                queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
-                queries = self.remove_duplicates(queries)
-                queries_id = self.generate_query_ids(len(queries))
-                
-                for _qid, query_text in zip(queries_id, queries):
-                    generated_queries[_qid] = query_text
-                    qrel[_qid] = doc_id
-
-                
-
+            queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
+            queries = self.remove_duplicates(queries)
+            queries_id = self.generate_query_ids(len(queries))
+            
+            for _qid, query_text in zip(queries_id, queries):
+                generated_queries[_qid] = query_text
+                qrel[_qid] = doc_id
 
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
         self.save_queries_to_json(qrel, f"{self.output_path}/qrel.json")
