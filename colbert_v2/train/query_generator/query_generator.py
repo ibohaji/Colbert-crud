@@ -90,6 +90,9 @@ class QueryGenerator:
                     print('doc before  cleeaning:',doc)
                     print('doc id:',doc_id)
                     doc = self._clean_text(doc)
+                    with open('cleaned_docs.txt','w') as f:
+                        f.write(doc)
+                        
                     return doc
                     print('doc after cleaning:',doc)
                     print('\nThe batch docs are\n,',batch_docs)
