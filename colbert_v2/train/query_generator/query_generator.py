@@ -135,20 +135,9 @@ class QueryGenerator:
 
         for start_idx in tqdm(range(0,len(doc_items),batch_size), desc="Generating queries"):
             batch_docs = doc_items[start_idx:start_idx+batch_size]
-
+            
             for doc_id, doc in batch_docs:
-                    print('doc before  cleeaning:',doc)
-                    print('doc id:',doc_id)
                     doc = self._clean_text(doc)
-                    with open('cleaned_docs.txt','w') as f:
-                        f.write(doc)
-                        
-                    return doc
-                    print('doc after cleaning:',doc)
-                    print('\nThe batch docs are\n,',batch_docs)
-                    print('Doc ids are \n',doc_id)
-                    print('Docs are \n',doc)
-                    break
                     input_ids = self.tokenizer.encode(
                         doc,
                         max_length=512,
