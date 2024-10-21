@@ -90,7 +90,7 @@ class QueryGenerator:
                     print('doc before  cleeaning:',doc)
                     print('doc id:',doc_id)
                     doc = self._clean_text(doc)
-                    return None
+                    return doc
                     print('doc after cleaning:',doc)
                     print('\nThe batch docs are\n,',batch_docs)
                     print('Doc ids are \n',doc_id)
