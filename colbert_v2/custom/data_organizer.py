@@ -66,7 +66,7 @@ class CollectionData:
         
         for key, doc in json_data.items():
             # lazy loader
-            doc['id'] = key
+            doc['_id'] = key
             doc['text'] = doc.get('title', '') + doc.get('text', '')
             yield doc
     
