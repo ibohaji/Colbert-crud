@@ -6,7 +6,7 @@ from colbert_v2 import CollectionData, GenQueryData
 from .sampler import HardNegativesSampler
 import os 
 from .el_search import EsSearcher
-
+import json
 
 def save_pairs(scored_triples, output_path):
     with open(output_path, 'w') as f:
@@ -42,7 +42,11 @@ def generate_pairs(queries_data, hard_negatives):
 def main(generated_queries_path, collection_path, host, out_path, num_negatives=3):
     print('starting...')
     with EsSearcher() as  es_searcher:
-
+        with open(generated_queries_path) as f:
+            data = json.loads(f)
+        
+        print(data)
+        return None
         queries_data = GenQueryData(generated_queries_path)
         collection_data = CollectionData(collection_path)
         print(f"Queries data dict: {queries_data.queries_dict}")
