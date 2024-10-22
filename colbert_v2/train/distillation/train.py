@@ -79,6 +79,7 @@ def convert_quirky_json(input_file, output_file):
 
 
 
+
 def run_distillation(triples_, queries_, collection_, experiment):
 
     with Run().context(RunConfig(nranks=1, experiment=experiment)):
@@ -103,4 +104,5 @@ if __name__ == "__main__":
     experiment = args.experiment
 
     convert_quirky_json(triples, triples)
+    convert_jsonl_with_scores(queries, queries)
     run_distillation(triples, queries, collection, experiment)
