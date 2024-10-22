@@ -12,7 +12,7 @@ class GenQueryData:
         q_map_dict = {}
         with open(self.genqueries) as f:
             queries = json.load(f)
-        if self.qrels_path :
+        if self.qrels :
             with open(self.qrels) as f:
                 qrels = json.load(f)
 
