@@ -82,9 +82,16 @@ if __name__ == "__main__":
                          type=int, 
                          help="Number of negative samples to retrieve from Elasticsearch"
                          )
+    
+    parser.add_argument('--qrel_path',
+                        type=str,
+                        help="Path to the qrel file"
+                        )
+    
     parser.add_argument('--out_path',
-                        help="Output directory of the pairs")
+                        help="Output directory of the pairs"
+                        )
     args = parser.parse_args()
     print('starting..')
 
-    main(args.generated_queries_path, args.collection_path, args.host, args.out_path, args.num_negatives)
+    main(args.generated_queries_path, args.collection_path, args.host, args.out_path, args.num_negatives, args.qrel_path)
