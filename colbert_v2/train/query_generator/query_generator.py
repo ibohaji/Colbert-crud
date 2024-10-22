@@ -153,14 +153,19 @@ class QueryGenerator:
                         num_return_sequences=5
                     )
 
-            queries = [self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
-            queries = self.remove_duplicates(queries)
-            queries_id = self.generate_query_ids(len(queries))
-            
-            for _qid, query_text in zip(queries_id, queries):
-                generated_queries[_qid] = query_text
-                qrel[_qid] = doc_id
-
+                    queries = [
+                        self._clean_text(self.tokenizer.decode(output, skip_special_tokens=True)) 
+                        for output in outputs
+                        ]   
+                    
+                    queries = self.remove_duplicates(queries)
+                    queries_id = self.generate_query_ids(len(queries))
+                    
+                    for _qid, query_text in zip(queries_id, queries):
+                        generated_queries[_qid] = query_text
+                        qrel[_qid] = doc_id
+                        
+        print(f"Total generated queries: {len(generated_queries)}")
         self.save_queries_to_json(generated_queries, f"{self.output_path}/generated_queries.json")
         self.save_queries_to_json(qrel, f"{self.output_path}/qrel.json")
         self.generate_split_queries(generated_queries, qrel)
