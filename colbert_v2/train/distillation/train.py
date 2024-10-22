@@ -102,5 +102,5 @@ if __name__ == "__main__":
     collection = args.collection
     experiment = args.experiment
 
-    convert_quirky_json(input, input)
+    convert_quirky_json(triples, triples)
     run_distillation(triples, queries, collection, experiment)
