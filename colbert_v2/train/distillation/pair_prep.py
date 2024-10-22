@@ -46,7 +46,7 @@ def main(generated_queries_path, collection_path, host, out_path, num_negatives=
         queries_data = GenQueryData(generated_queries_path)
         collection_data = CollectionData(collection_path)
 
-        hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data).get_hard_negatives_all(num_negatives=num_negatives)
+        hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, es=es_searcher ).get_hard_negatives_all(num_negatives=num_negatives)
         qids, pids = generate_pairs(queries_data, hard_negatives)
 
 
