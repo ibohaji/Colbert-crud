@@ -3,22 +3,23 @@ import logging
 from typing import Dict
 
 class GenQueryData:
-    def __init__(self, generated_queries_path):
+    def __init__(self, generated_queries_path, qrels_path):
         self.genqueries = generated_queries_path
+        self.qrels = qrels_path
         self.queries_dict = self.load_data()
 
     def load_data(self):
+        q_map_dict = {}
         with open(self.genqueries) as f:
             queries = json.load(f)
 
-        queries_dict = {}
-        for doc_id, query_list in queries.items():
-            for query_text in query_list:
-                query_id = f"Q{len(queries_dict) + 1}"
-                queries_dict[query_id] = {"text":query_text, "doc_id": doc_id}
+        with open(self.qrels) as f:
+            qrels = json.load(f)
 
-        return queries_dict
+        for qid,pid in qrels.items():
+            q_map_dict[qid] = { "text": queries[qid]['text'], "doc_id": pid }
 
+        return q_map_dict
 
 class CollectionData:
     def __init__(self, collection_path):
@@ -94,4 +95,5 @@ class CollectionData:
     def make_collection_pids(self):
         """Creates a list of all document IDs."""
         return [doc['_id'] for doc in self.collection_dict]
+
 
