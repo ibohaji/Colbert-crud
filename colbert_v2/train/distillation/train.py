@@ -81,7 +81,7 @@ def convert_quirky_json(input_file, output_file):
 
 def run_distillation(triples_, queries_, collection_):
 
-    with Run().context(RunConfig(nranks=1, experiment='distillation')):
+    with Run().context(RunConfig(nranks=1, experiment=experiment)):
         config = ColBERTConfig(bsize=32, lr=LR, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=8, accumsteps=1, similarity='cosine', use_ib_negatives=True)
         trainer = Trainer(triples=triples_, queries=queries_, collection=collection_, config=config)
         trainer.train(checkpoint='colbert-ir/colbertv1.9')
@@ -94,13 +94,13 @@ if __name__ == "__main__":
     parser.add_argument('--triples_path', type=str, required=True)
     parser.add_argument('--queries', type=str, required=True)
     parser.add_argument('--collection', type=str, required=True)
+    parser.add_argument('--experiment', type=str, required=True)
 
     args = parser.parse_args()
     triples = args.triples_path
     queries = args.queries
     collection = args.collection
-    output= 'triples_scores.json'
-    input = 'altered_distillations_scores.json'
-    convert_quirky_json(input, output)
+    experiment = args.experiment
 
-    run_distillation('triples_scores.json', 'queries.json', 'collection.tsv')
+    convert_quirky_json(input, input)
+    run_distillation(triples, queries, collection, experiment)
