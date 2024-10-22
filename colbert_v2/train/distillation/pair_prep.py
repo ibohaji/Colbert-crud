@@ -5,7 +5,7 @@ import ujson
 from colbert_v2 import CollectionData, GenQueryData
 from .sampler import HardNegativesSampler
 import os 
-
+from .el_search import EsSearcher
 
 
 def save_pairs(scored_triples, output_path):
@@ -41,11 +41,13 @@ def generate_pairs(queries_data, hard_negatives):
 
 def main(generated_queries_path, collection_path, host, out_path, num_negatives=3):
     print('starting...')
-    queries_data = GenQueryData(generated_queries_path)
-    collection_data = CollectionData(collection_path)
+    with EsSearcher(host=host) as  es_searcher:
 
-    hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, host=host).get_hard_negatives_all(num_negatives=num_negatives)
-    qids, pids = generate_pairs(queries_data, hard_negatives)
+        queries_data = GenQueryData(generated_queries_path)
+        collection_data = CollectionData(collection_path)
+
+        hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data).get_hard_negatives_all(num_negatives=num_negatives)
+        qids, pids = generate_pairs(queries_data, hard_negatives)
 
 
     save_pairs(qids, os.path.join(out_path,'qids.json'))
