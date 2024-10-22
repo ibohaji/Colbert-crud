@@ -5,6 +5,7 @@ import time
 import requests
 from elasticsearch import Elasticsearch, helpers
 from contextlib import ContextDecorator
+import re 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -128,6 +129,32 @@ class EsSearcher(ContextDecorator):
         logger.info(f"PID: {es_process.pid}")
 
         return es_process
+    
+    def extract_es_binding_from_logs(self):
+        """
+        Parses the Elasticsearch stdout and stderr to extract the bound IP and port.
+        """
+        logger.info("Extracting Elasticsearch bindings from logs...")
+        while True:
+            output = self.es_process.stdout.readline()  
+
+            if output == '' and self.es_process.poll() is not None:
+                logger.error("Elasticsearch process finished before detecting binding.")
+                break
+
+            # Parse the logs for binding information
+            match = re.search(r"publish_address \{([0-9.:]+)\}", output)
+            if match:
+                bound_ip = match.group(1)
+                logger.info(f"Elasticsearch is bound to {bound_ip}")
+                return bound_ip.split(':')[0], bound_ip.split(':')[1]
+
+            # For debugging: print every log line if needed
+            logger.debug(f"Elasticsearch log: {output.strip()}")
+        
+        logger.error("Failed to extract Elasticsearch binding.")
+        return None, None
+
 
     def wait_for_elasticsearch(self, host, port, max_retries=5):
         retries = 0
