@@ -32,7 +32,7 @@ def json_to_tsv(input_file, output_file):
         for key, value in data.items():
             title = value.get('title', '')
             text = value.get('text', '')
-            combined_value = title + " " + text
+            combined_value = title  + text
 
             writer.writerow([key, combined_value])
 
@@ -104,5 +104,6 @@ if __name__ == "__main__":
     experiment = args.experiment
 
     #convert_quirky_json(triples, triples)
-    convert_jsonl_with_scores(queries, queries)
+    #convert_jsonl_with_scores(queries, queries)
+    json_to_tsv(collection, collection)
     run_distillation(triples, queries, collection, experiment)
