@@ -80,7 +80,6 @@ if __name__ == "__main__":
                          help="Number of negative samples to retrieve from Elasticsearch"
                          )
     parser.add_argument('out_path',
-                        required=True,
                         help="Output directory of the pairs")
     args = parser.parse_args()
     print('starting..')
