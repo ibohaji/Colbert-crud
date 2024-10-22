@@ -43,7 +43,7 @@ def main(generated_queries_path, collection_path, host, out_path, num_negatives=
     print('starting...')
     with EsSearcher() as  es_searcher:
         with open(generated_queries_path) as f:
-            data = json.loads(f)
+            data = json.loads(f.read())
         
         print(data)
         return None
