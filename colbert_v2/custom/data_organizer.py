@@ -17,7 +17,7 @@ class GenQueryData:
             qrels = json.load(f)
 
         for qid,pid in qrels.items():
-            q_map_dict[qid] = { "text": queries[qid]['text'], "doc_id": pid }
+            q_map_dict[qid] = { "text": queries[qid], "doc_id": pid }
 
         return q_map_dict
 
