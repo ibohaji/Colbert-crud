@@ -14,15 +14,10 @@ class EsSearcher(ContextDecorator):
     def __enter__(self):
         """This is called when entering the context (when Elasticsearch starts)."""
         try:
-            # Start Elasticsearch in the background and capture the process
             self.es_process = self.start_elasticsearch()
-            host = self.get_host_ip()
-
-            # Wait until Elasticsearch is ready
-            self.wait_for_elasticsearch(host)
-
-            # Connect to Elasticsearch
-            self.es = Elasticsearch(f"http://{host}:9200", timeout=30)
+            host, port = self.get_es_binding()
+            self.wait_for_elasticsearch(host, port)
+            self.es = Elasticsearch(f"http://{host}:{port}", timeout=30)
             self.index_name = 'documents'
             logger.info(f"Connected to Elasticsearch at {host}")
 
@@ -123,20 +118,23 @@ class EsSearcher(ContextDecorator):
 
     def start_elasticsearch(self):
         print("Starting Elasticsearch...")
+        
         es_process = subprocess.Popen(
             ['/zhome/3a/7/145702/elasticsearch-8.5.0/bin/elasticsearch'],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
+
         return es_process
 
-    def wait_for_elasticsearch(self, host, max_retries=5):
+    def wait_for_elasticsearch(self, host, port, max_retries=5):
         retries = 0
-        logger.info(f"Waiting for Elasticsearch to be available at {host}...")
+        logger.info(f"Waiting for Elasticsearch to be available at {host}:{port}...")
 
         while retries < max_retries:
             try:
-                response = requests.get(f"http://{host}:9200")
+                # Try to connect to Elasticsearch
+                response = requests.get(f"http://{host}:{port}")
                 if response.status_code == 200:
                     logger.info("Elasticsearch is ready!")
                     return
@@ -146,14 +144,35 @@ class EsSearcher(ContextDecorator):
                 time.sleep(5)
 
         raise ConnectionError(f"Failed to connect to Elasticsearch after {max_retries} attempts.")
-
-        raise ConnectionError(f"Failed to connect to Elasticsearch after {max_retries} attempts.")
     
 
     def get_host_ip(self):
         host_ip = subprocess.getoutput("hostname -I").split()[0]
         logger.info(f"Detected host IP: {host_ip}")
         return host_ip
+
+
+    def get_es_binding(self):
+        """Check the bound IP and port for Elasticsearch."""
+        logger.info("Checking Elasticsearch bindings...")
+
+        # Use netstat to find the port and IP Elasticsearch is listening on
+        try:
+            output = subprocess.getoutput("netstat -tuln | grep :9200")
+            logger.info(f"netstat output: {output}")
+
+            # Find the IP and port from netstat output
+            if output:
+                # Extract the IP and port
+                parts = output.split()
+                bound_ip, bound_port = parts[3].split(':')
+                logger.info(f"Elasticsearch is bound to {bound_ip}:{bound_port}")
+                return bound_ip, bound_port
+            else:
+                raise Exception("Failed to detect Elasticsearch binding via netstat.")
+        except Exception as e:
+            logger.error(f"Error detecting Elasticsearch binding: {e}")
+            raise e
 
 
     
