@@ -49,7 +49,7 @@ if __name__=="__main__":
         f.write(json.dumps(queries, indent=4))
 
     collection = collection.collection_dict
-    collection = {doc['_id']: doc['title'] + doc['text'] for doc in collection}
+    collection = {doc['_id']: doc['text'] for doc in collection}
 
     with open(args.qid_path) as f:
         qids = [line.strip().strip('"') for line in f.readlines()]
@@ -58,6 +58,6 @@ if __name__=="__main__":
         pids = [line.strip().strip('"') for line in f.readlines()]
 
 
-    #main(qids, pids, collection, queries)
+    main(qids, pids, collection, queries)
 
 

@@ -6,6 +6,10 @@ from colbert import Trainer
 from colbert.infra.config import ColBERTConfig, RunConfig
 from colbert.infra.run import Run
 
+
+
+LR = 1e-05
+WARMUP = 20_000
 #################### ALL THESE CONVERSION FUNCTION ARE NEEDED CAUSE COLBERT IS INCONSISTENT WITH ITS INPUT FORMATS ####################
 #################### AND CONTAIN A LOT OF BUGS IN ITS CODE ####################
 #################### THESE FUNCTIONS ARE USED TO CONVERT THE INPUT DATA TO THE FORMAT COLBERT EXPECTS ####################
@@ -78,7 +82,7 @@ def convert_quirky_json(input_file, output_file):
 def run_distillation(triples_, queries_, collection_):
 
     with Run().context(RunConfig(nranks=1, experiment='distillation')):
-        config = ColBERTConfig(bsize=32, lr=1e-05, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=8, accumsteps=1, similarity='cosine', use_ib_negatives=True)
+        config = ColBERTConfig(bsize=32, lr=LR, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=8, accumsteps=1, similarity='cosine', use_ib_negatives=True)
         trainer = Trainer(triples=triples_, queries=queries_, collection=collection_, config=config)
         trainer.train(checkpoint='colbert-ir/colbertv1.9')
 

@@ -41,7 +41,7 @@ def generate_pairs(queries_data, hard_negatives):
 
 def main(generated_queries_path, collection_path, host, out_path, num_negatives=3):
     print('starting...')
-    with EsSearcher(host=host) as  es_searcher:
+    with EsSearcher() as  es_searcher:
 
         queries_data = GenQueryData(generated_queries_path)
         collection_data = CollectionData(collection_path)
