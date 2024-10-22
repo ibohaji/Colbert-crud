@@ -29,11 +29,11 @@ class CollectionData:
 
 
     def load_collection(self, collection_path):
-        if collection_path.endwith('.jsonl'):
+        if collection_path.endswith('.jsonl'):
             return self.load_jsonl(collection_path)
-        elif collection_path.endwith('.json'):
+        elif collection_path.endswith('.json'):
             return self.load_json(collection_path)
-        elif collection_path.endwith('.tsv'):
+        elif collection_path.endswith('.tsv'):
             return self.load_tsv(collection_path)
         else:
             raise ValueError("Input file must be a .json or .jsonl file")
