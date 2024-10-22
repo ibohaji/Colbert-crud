@@ -126,8 +126,6 @@ class EsSearcher(ContextDecorator):
         )
         logger.info("Elasticsearch started.")
         logger.info(f"PID: {es_process.pid}")
-        logger.info(f"STDOUT: {es_process.stdout.readline().decode().strip()}")
-        logger.info(f"STDERR: {es_process.stderr.readline().decode().strip()}")
 
         return es_process
 
@@ -157,17 +155,12 @@ class EsSearcher(ContextDecorator):
 
 
     def get_es_binding(self):
-        """Check the bound IP and port for Elasticsearch."""
         logger.info("Checking Elasticsearch bindings...")
 
-        # Use netstat to find the port and IP Elasticsearch is listening on
         try:
             output = subprocess.getoutput("netstat -tuln | grep :9200")
             logger.info(f"netstat output: {output}")
-
-            # Find the IP and port from netstat output
             if output:
-                # Extract the IP and port
                 parts = output.split()
                 bound_ip, bound_port = parts[3].split(':')
                 logger.info(f"Elasticsearch is bound to {bound_ip}:{bound_port}")
