@@ -39,7 +39,7 @@ if __name__=="__main__":
     parser.add_argument('--output_path', type=str, required=True)
     args = parser.parse_args()
 
-    queries = GenQueryData(args.queries_path)
+    queries = GenQueryData(args.queries_path, qrels_path=None)
     collection = CollectionData(args.collection_path)
 
     queries = queries.queries_dict
