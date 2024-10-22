@@ -36,7 +36,7 @@ if __name__=="__main__":
     parser.add_argument('--pid_path', type=str, required=True)
     parser.add_argument('--collection_path', type=str, required=True)
     parser.add_argument('--queries_path', type=str, required=True)
-
+    parser.add_argument('--output_path', type=str, required=True)
     args = parser.parse_args()
 
     queries = GenQueryData(args.queries_path)
