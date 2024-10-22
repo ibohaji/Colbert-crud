@@ -124,6 +124,10 @@ class EsSearcher(ContextDecorator):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
+        logger.info("Elasticsearch started.")
+        logger.info(f"PID: {es_process.pid}")
+        logger.info(f"STDOUT: {es_process.stdout.readline().decode().strip()}")
+        logger.info(f"STDERR: {es_process.stderr.readline().decode().strip()}")
 
         return es_process
 
