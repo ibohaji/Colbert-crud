@@ -103,6 +103,6 @@ if __name__ == "__main__":
     collection = args.collection
     experiment = args.experiment
 
-    convert_quirky_json(triples, triples)
+    #convert_quirky_json(triples, triples)
     convert_jsonl_with_scores(queries, queries)
     run_distillation(triples, queries, collection, experiment)
