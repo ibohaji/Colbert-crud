@@ -4,6 +4,8 @@ import tqdm
 import ujson
 from colbert_v2 import CollectionData, GenQueryData
 from .sampler import HardNegativesSampler
+import os 
+
 
 
 def save_pairs(scored_triples, output_path):
@@ -37,7 +39,7 @@ def generate_pairs(queries_data, hard_negatives):
     return qids, pids
 
 
-def main(generated_queries_path, collection_path, host, num_negatives=3):
+def main(generated_queries_path, collection_path, host, out_path, num_negatives=3):
     print('starting...')
     queries_data = GenQueryData(generated_queries_path)
     collection_data = CollectionData(collection_path)
@@ -45,8 +47,9 @@ def main(generated_queries_path, collection_path, host, num_negatives=3):
     hard_negatives = HardNegativesSampler(queries=queries_data, collection=collection_data, host=host).get_hard_negatives_all(num_negatives=num_negatives)
     qids, pids = generate_pairs(queries_data, hard_negatives)
 
-    save_pairs(qids, 'qids.json')
-    save_pairs(pids, 'pids.json')
+
+    save_pairs(qids, os.path.join(out_path,'qids.json'))
+    save_pairs(pids, os.path.join(out_path,'pids.json'))
     print("saved pairs")
 
 
@@ -76,7 +79,10 @@ if __name__ == "__main__":
                          type=int, 
                          help="Number of negative samples to retrieve from Elasticsearch"
                          )
+    parser.add_argument('out_path',
+                        required=True,
+                        help="Output directory of the pairs")
     args = parser.parse_args()
     print('starting..')
 
-    main(args.generated_queries_path, args.collection_path, args.host, args.num_negatives)
+    main(args.generated_queries_path, args.collection_path, args.host, args.out_path, args.num_negatives)
