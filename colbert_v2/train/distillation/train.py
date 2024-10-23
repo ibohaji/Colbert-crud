@@ -111,6 +111,8 @@ if __name__ == "__main__":
     collection = args.collection
     experiment = args.experiment
 
-    convert_jsonl_with_scores(queries, queries)
-    json_to_tsv(collection, 'collection.tsv')
+    
+    if collection.endswith('.json'):
+            json_to_tsv(collection, 'collection.tsv')
+
     run_distillation(triples, queries, collection, experiment)
