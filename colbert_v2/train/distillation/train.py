@@ -26,8 +26,7 @@ def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
 
 def json_to_tsv(input_file, output_file):
     with open(input_file, 'r', encoding='utf-8') as infile:
-        content = infile.read().strip()  # Read file and strip any surrounding whitespace
-
+        content = infile.read().strip()  
         if not content:
             raise ValueError(f"The input file {input_file} is empty or invalid.")
 
@@ -39,9 +38,12 @@ def json_to_tsv(input_file, output_file):
         for key, value in data.items():
             title = value.get('title', '')
             text = value.get('text', '')
-            combined_value = title + " " + text  # Ensure there's a space between title and text
-
-            writer.writerow([key, combined_value])
+            combined_value = (title + " " + text).strip() 
+            
+            if key and combined_value:  # Ensure both key and combined_value are non-empty
+                writer.writerow([key, combined_value])
+            else:
+                print(f"Skipping entry with key: {key} due to missing title or text")
 
 
 def convert_jsonl_with_scores(input_jsonl_path, output_jsonl_path):
