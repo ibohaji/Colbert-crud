@@ -117,7 +117,9 @@ if __name__ == "__main__":
     experiment = args.experiment
 
     
+    collection_tsv = 'data/panson_data/collection.tsv'
+    
     if collection.endswith('.json'):
-            json_to_tsv(collection, 'data/panson_data/collection.tsv')
-    collection = 'data/panson_data/collection.tsv'
-    run_distillation(triples, queries, collection, experiment)
+            json_to_tsv(collection, collection_tsv)
+
+    run_distillation(triples, queries, collection_tsv, experiment)
