@@ -114,5 +114,5 @@ if __name__ == "__main__":
     
     if collection.endswith('.json'):
             json_to_tsv(collection, 'data/panson_data/collection.tsv')
-    collection = 'collection.tsv'
+    collection = 'data/panson_data/collection.tsv'
     run_distillation(triples, queries, collection, experiment)
