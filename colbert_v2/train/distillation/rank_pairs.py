@@ -23,11 +23,12 @@ def main(qids, pids, collection, queries):
 
     with open('distillation_scores.json', 'w') as f:
         for qid in tqdm.tqdm(scores_by_qid):
-            obj = (qid, scores_by_qid[qid])
-            f.write(ujson.dumps(obj) + '\n')
+            # Reverse the order in the (score, pid) tuple to (pid, score)
+            formatted_entry = [qid] + [[pid, score] for score, pid in scores_by_qid[qid]]
+            f.write(json.dumps(formatted_entry) + '\n')
 
-        output_path = f.name
-        print(f"Saved distillation scores to {output_path}")
+    output_path = f.name
+    print(f"Saved distillation scores to {output_path}")
 
 
 if __name__=="__main__":

@@ -1,6 +1,8 @@
 import json
 import logging
 from typing import Dict
+import json
+import csv
 
 class GenQueryData:
     def __init__(self, generated_queries_path, qrels_path):
@@ -95,6 +97,18 @@ class CollectionData:
     def load_tsv(self, input_file:str)->Dict:
         raise NotImplementedError("Tsv file not supported yet")
     
+    def make_tsv(self, output_file:str):
+            with open(self.collection_path, 'r') as infile, open(self.collection_path, 'w', newline='', encoding='utf-8') as outfile:
+                data = json.load(infile)
+
+                tsv_writer = csv.writer(outfile, delimiter='\t')
+
+                tsv_writer.writerow(["_id", "text"])
+
+                for key, value in data.items():
+                    title_text = f"{value['title']} {value['text']}"
+                    tsv_writer.writerow([key, title_text])
+                
 
     def make_collection_pids(self):
         """Creates a list of all document IDs."""

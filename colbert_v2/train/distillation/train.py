@@ -5,6 +5,7 @@ import json
 from colbert import Trainer
 from colbert.infra.config import ColBERTConfig, RunConfig
 from colbert.infra.run import Run
+import os  
 
 
 
@@ -24,15 +25,21 @@ def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
             jsonl_file.write(json.dumps({"qid": key, "question": value}) + '\n')
 
 def json_to_tsv(input_file, output_file):
-    with open(input_file, encoding='utf-8') as infile, open(output_file, 'w', newline='', encoding='utf-8') as outfile:
-        writer = csv.writer(outfile, delimiter='\t')
+    with open(input_file, 'r', encoding='utf-8') as infile:
+        content = infile.read().strip()  # Read file and strip any surrounding whitespace
 
-        data = json.load(infile)
+        if not content:
+            raise ValueError(f"The input file {input_file} is empty or invalid.")
+
+        data = json.loads(content)  # Use loads here as we have already read the content
+
+    with open(output_file, 'w', newline='', encoding='utf-8') as outfile:
+        writer = csv.writer(outfile, delimiter='\t')
 
         for key, value in data.items():
             title = value.get('title', '')
             text = value.get('text', '')
-            combined_value = title  + text
+            combined_value = title + " " + text  # Ensure there's a space between title and text
 
             writer.writerow([key, combined_value])
 
@@ -96,6 +103,7 @@ if __name__ == "__main__":
     parser.add_argument('--queries', type=str, required=True)
     parser.add_argument('--collection', type=str, required=True)
     parser.add_argument('--experiment', type=str, required=True)
+    parser.add_argument('--output_dir', type=str, default=os.getcwd())
 
     args = parser.parse_args()
     triples = args.triples_path
@@ -103,7 +111,6 @@ if __name__ == "__main__":
     collection = args.collection
     experiment = args.experiment
 
-    #convert_quirky_json(triples, triples)
-    #convert_jsonl_with_scores(queries, queries)
-    json_to_tsv(collection, collection)
+    convert_jsonl_with_scores(queries, queries)
+    json_to_tsv(collection, 'collection.tsv')
     run_distillation(triples, queries, collection, experiment)
