@@ -24,9 +24,12 @@ def convert_json_file_to_jsonl(input_json_path, output_jsonl_path):
         for key, value in input_json.items():
             jsonl_file.write(json.dumps({"qid": key, "question": value}) + '\n')
 
+
+
 def json_to_tsv(input_file, output_file):
     with open(input_file, 'r', encoding='utf-8') as infile:
-        content = infile.read().strip()  
+        content = infile.read().strip()  # Read file and strip any surrounding whitespace
+
         if not content:
             raise ValueError(f"The input file {input_file} is empty or invalid.")
 
@@ -36,10 +39,10 @@ def json_to_tsv(input_file, output_file):
         writer = csv.writer(outfile, delimiter='\t')
 
         for key, value in data.items():
-            title = value.get('title', '')
-            text = value.get('text', '')
-            combined_value = (title + " " + text).strip() 
-            
+            title = value.get('title', '').strip()
+            text = value.get('text', '').replace('\n', ' ').strip()  # Remove newlines and trailing spaces
+            combined_value = (title + " " + text).strip()  # Ensure there's a space between title and text
+
             if key and combined_value:  # Ensure both key and combined_value are non-empty
                 writer.writerow([key, combined_value])
             else:
