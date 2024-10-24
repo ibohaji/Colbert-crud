@@ -92,9 +92,9 @@ def convert_quirky_json(input_file, output_file):
 
 
 
-def run_distillation(triples_, queries_, collection_, experiment):
+def run_distillation(triples_, queries_, collection_, experiment, nranks):
 
-    with Run().context(RunConfig(nranks=1, experiment=experiment)):
+    with Run().context(RunConfig(nranks=nranks, experiment=experiment)):
         config = ColBERTConfig(bsize=32, checkpoint='colbert-ir/colbertv1.9', lr=LR, warmup=20_000, accumsteps=1, doc_maxlen=512, dim=128, attend_to_mask_tokens=False, nway=64, similarity='cosine', use_ib_negatives=True)
         trainer = Trainer(triples=triples_, queries=queries_, collection=collection_, config=config)
         trainer.train(checkpoint='colbert-ir/colbertv1.9')
@@ -109,14 +109,16 @@ if __name__ == "__main__":
     parser.add_argument('--collection', type=str, required=True)
     parser.add_argument('--experiment', type=str, required=True)
     parser.add_argument('--output_dir', type=str, default=os.getcwd())
+    parser.add_argument('--nranks', type=int, default=1)
 
     args = parser.parse_args()
     triples = args.triples_path
     queries = args.queries
     collection = args.collection
     experiment = args.experiment
+    output_dir = args.output_dir
+    nranks = args.nranks
 
     
-    run_distillation(triples, queries, collection, experiment)
-
+    run_distillation(triples, queries, collection, experiment, nranks)
 
