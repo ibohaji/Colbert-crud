@@ -43,7 +43,8 @@ class GenQueryData:
                 with open(self.qrels) as f:
                     qrels = json.load(f)
                     for qid,pid in qrels.items():
-                     data_dict[qid] = { "text": data_dict[qid]['text'], "doc_id": pid }
+                     if qid in data_dict:    
+                        data_dict[qid] = { "text": data_dict[qid]['text'], "doc_id": pid }
 
 
         return data_dict
