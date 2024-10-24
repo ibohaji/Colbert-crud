@@ -51,14 +51,13 @@ class Scorer:
 
                     features = tokenizer(queries_, passages_, padding='longest', truncation=True,
                                             return_tensors='pt', max_length=self.maxlen).to(model.device)
-
+                    
                     scores.append(model(**features).logits.flatten())
 
         scores = torch.cat(scores)
         scores = scores.tolist()
 
         Run().print(f'Returning with {len(scores)} scores')
-
         return scores
 
 

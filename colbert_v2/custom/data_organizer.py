@@ -11,6 +11,9 @@ class GenQueryData:
         self.queries_dict = self.load_data()
 
     def load_data(self):
+
+        if self.genqueries.endswith('.tsv'):
+            return self.load_tsv(self.genqueries)
         q_map_dict = {}
         with open(self.genqueries) as f:
             queries = json.load(f)
@@ -25,7 +28,20 @@ class GenQueryData:
         
         for qid, text in queries.items():
             q_map_dict[qid] = { "text": text }
+
+
         return q_map_dict
+
+    def load_tsv(self, input_file:str):
+        data_dict = {}
+        with open(input_file, 'r', newline='', encoding='utf-8') as f:
+            for line in f:
+                qid, text = line.strip().split('\t', 1)
+                data_dict[qid] = {'text': text}
+
+        return data_dict
+
+
 
 class CollectionData:
     def __init__(self, collection_path):
@@ -94,9 +110,8 @@ class CollectionData:
                             
 
     
-    def load_tsv(self, input_file:str)->Dict:
-        raise NotImplementedError("Tsv file not supported yet")
-    
+
+
     def make_tsv(self, output_file:str):
             with open(self.collection_path, 'r') as infile, open(self.collection_path, 'w', newline='', encoding='utf-8') as outfile:
                 data = json.load(infile)
