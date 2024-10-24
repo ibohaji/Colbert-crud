@@ -95,7 +95,7 @@ def convert_quirky_json(input_file, output_file):
 def run_distillation(triples_, queries_, collection_, experiment):
 
     with Run().context(RunConfig(nranks=1, experiment=experiment)):
-        config = ColBERTConfig(bsize=32, lr=LR, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=8, accumsteps=1, similarity='cosine', use_ib_negatives=True)
+        config = ColBERTConfig(bsize=32, lr=LR, warmup=20_000, doc_maxlen=180, dim=128, attend_to_mask_tokens=False, nway=64, similarity='cosine', use_ib_negatives=True)
         trainer = Trainer(triples=triples_, queries=queries_, collection=collection_, config=config)
         trainer.train(checkpoint='colbert-ir/colbertv1.9')
 
