@@ -38,6 +38,14 @@ class GenQueryData:
             for line in f:
                 qid, text = line.strip().split('\t', 1)
                 data_dict[qid] = {'text': text}
+            
+            if self.qrels:
+                with open(self.qrels) as f:
+                    qrels = json.load(f)
+
+                    for qid,pid in qrels.items():
+                     data_dict[qid] = { "text": data_dict[qid], "doc_id": pid }
+
 
         return data_dict
 

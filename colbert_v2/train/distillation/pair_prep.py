@@ -39,7 +39,7 @@ def generate_pairs(queries_data, hard_negatives):
     return qids, pids
 
 
-def main(generated_queries_path, collection_path, host, out_path, qrel, num_negatives=3):
+def main(generated_queries_path, collection_path, out_path, qrel, num_negatives=3):
     print('starting...')
     with EsSearcher() as  es_searcher:
 
@@ -69,12 +69,6 @@ if __name__ == "__main__":
                           help="Path to the collection"
                           )
     
-    parser.add_argument("--host", 
-                        type=str, 
-                        default=None, 
-                        help="Elasticsearch host"
-                        )
-    
     parser.add_argument("--num_negatives",
                          default=64,
                          type=int, 
@@ -92,4 +86,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     print('starting..')
 
-    main(args.generated_queries_path, args.collection_path, args.host, args.out_path, args.qrel_path, args.num_negatives)
+    main(args.generated_queries_path, args.collection_path, args.out_path, args.qrel_path, args.num_negatives)
